@@ -188,8 +188,8 @@ Options -MultiViews
 
 
 
-
 RewriteBase /j10
+
 
 RewriteRule ^site/(.*).html$				index.php?type=site&site=$1 [QSA,L]
 
