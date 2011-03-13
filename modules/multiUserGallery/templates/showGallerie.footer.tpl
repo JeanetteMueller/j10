@@ -1,0 +1,1 @@
+<a href="javascript:;" class="is_gallery_addImageButton">Neues Bild hochladen</a>

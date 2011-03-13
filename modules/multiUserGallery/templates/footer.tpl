@@ -1,0 +1,1 @@
+<a href="javascript:;" class="is_gallery_addGalleryButton">Neue Galerie anlegen</a>

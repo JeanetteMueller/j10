@@ -1,0 +1,11 @@
+.is_multiUserGallery .grid{
+	
+	float:left;
+}
+.is_multiUserGallery .griditem{
+	width:140px;
+	float:left;
+	padding:5px;
+	margin:5px;
+	border:2px solid #999;
+}
