@@ -1,0 +1,1 @@
+Eine neue Galerie soll ein Fotoset umfassen. Ein Fotoshooting mit einem Model. Nicht mehr. Für jedes neue Thema mach bitte jeweils ein neues Album damit die Inhalte besser nachvollzogen werden können.

@@ -1,0 +1,28 @@
+body{
+	width:100%;
+}
+div{
+	border: 1px solid #eee;
+}
+
+.slot_header{
+	width:100%;
+	float:left;
+}
+.slot_content{
+
+}
+.slot_sidebar_left{
+	background:#f0f0f0;
+	width:22%;
+	float:left;
+}
+.slot_sidebar_right{
+	background:#f0f0f0;
+	width:22%;
+	float:right;
+}
+.slot_footer{
+	width:100%;
+	float:left;
+}
