@@ -107,6 +107,9 @@ class Module_MultiUserGallery extends Module{
 		return false;
 		
 	}	
+	public function getHeader(){
+		return true;
+	}
 	public function getContent(){
 		
 		// echo $this->id.' - ';
@@ -122,6 +125,9 @@ class Module_MultiUserGallery extends Module{
 		
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
 		}
+	}
+	public function getFooter(){
+		return true;
 	}
 	private function getGalleryTaxonomie($gallery_id = 0){
 		$db = $this->getDatabase();

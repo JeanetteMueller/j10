@@ -94,7 +94,10 @@ class Module {
 	}
 	public function loadHeader(){
 		
-		if($this->getHeader() === false && !file_exists('modules/'.$this->name.'/templates/head.tpl')){
+		if($this->getHeader() === false){
+			return false;
+		}
+		if(!file_exists('modules/'.$this->name.'/templates/head.tpl')){
 			return false;
 		}
 
@@ -107,7 +110,10 @@ class Module {
 		return false;
 	}
 	public function loadContent(){
-		if($this->getContent() === false && !file_exists('modules/'.$this->name.'/templates/content.tpl')){
+		if($this->getContent() === false){
+			return false;
+		}
+		if(!file_exists('modules/'.$this->name.'/templates/content.tpl')){
 			return false;
 		}
 		return $this->fetch('content.tpl');
@@ -119,7 +125,9 @@ class Module {
 	}
 	public function loadFooter(){
 		
-
+		if($this->getFooter() === false){
+			return false;
+		}
 		if($this->getFooter() === false && !file_exists('modules/'.$this->name.'/templates/footer.tpl')){
 			return false;
 		}

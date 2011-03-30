@@ -1,3 +1,15 @@
+body, a, a:active, a:visited, a:hover, li, dd, dt, td, th, div{
+	color:#aaa;
+}
+
+nav ul { margin-left:20px; list-style:square; }
+nav ul li{
+	line-height:20px;
+}
+header{
+	padding:160px 0 20px 0;
+	background:#fff url('../images/head.background.png') top left no-repeat;
+}
 #container{
 	width:900px;
 	margin: 0 auto;
@@ -27,24 +39,29 @@
 }
 
 .slot .modul .outerHeader{
-	background:url('../images/module.head.background.left.png') top left no-repeat;	
+	/*background:url('../images/module.head.background.left.png') top left no-repeat;	*/
 }
 .slot .modul .outerHeader .header{
-	padding: 0 15px 0 15px;
+	padding: 0 5px 0 5px;
 	height:20px;
-	color:#fff;
 	line-height: 20px;
 	font-weight:bold;
-	background:url('../images/module.head.background.right.png') top right no-repeat;
+	background:#fff;
+	border-left: 1px solid #ddd;
+	/*background:url('../images/module.head.background.right.png') top right no-repeat;*/
 }
+.slot .modul .outerHeader .header,
 .slot .modul .outerHeader .header a{
-	color:#fff;
+	color:#aaa;
 }
 
 .slot .modul .content{
 	background:none;
 	width:238px;
-	border:1px solid #ddd;
+	border-top:1px solid #ddd;
+	border-left:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	
 	padding:5px;
 }
 .slot_header .modul .content{
@@ -69,13 +86,20 @@
 .slot .modul .footer a{
 	color:#999;
 }
+.slot_content div, 
+.slot_content a, .slot_content a:active, .slot_content a:visited, .slot_content a:hover{
+	color:#333;
+}
 .slot_content .modul .footer{
 	width:380px;
 }
 
 
 
-
+#overlay div, 
+#overlay a, #overlay a:active, #overlay a:visited, #overlay a:hover{
+	color:#333;
+}
 #overlay #overlay_closeButton{
 	
 	top:15px;

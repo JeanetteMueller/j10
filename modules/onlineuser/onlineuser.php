@@ -48,5 +48,7 @@ class Module_Onlineuser extends Module{
 		
 		$this->assign('list', $list);
 	}
-
+	public function getFooter(){
+		return true;
+	}
 }
