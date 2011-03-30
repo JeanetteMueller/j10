@@ -54,6 +54,7 @@ class Template extends Includes{
 		$smarty->assign('REQUEST_URI', $this->core->GetServer('REQUEST_URI'));
 		$smarty->assign('ROOT', $this->rootPath);
 		$smarty->assign('THEME', $this->theme);
+		$smarty->assign('THEMEPATH', $themepath);
 		$smarty->assign('TEMPLATE_DIR', $this->rootPath.'/'.$themepath);
 		$smarty->assign('TEMPLATE_DIR_BASE', $this->rootPath.'/'.$this->themePath.$this->defaultTheme.'/');
 		$smarty->assign('EXTERNALS_DIR', $this->rootPath.'/'.$this->externalsPath);

@@ -1,1 +1,1 @@
-<a href="#" class="is_homeButton">Galerie</a> - <@ $gallery->title @>
+<a href="#" class="is_homeButton">Galerie</a> &rArr; <@ $gallery->title @>

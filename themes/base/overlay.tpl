@@ -1,10 +1,11 @@
 <@ if $overlay !== false @>
+
 <div id="modul__<@ $modul->path @>_<@ $modul->id @>" title="<@ $modul->path @>" class="modul<@ if $modul->object->autoRefresh() @> refresh<@ /if @> is_<@ $modul->path @>">
 	
 	
 	<@ assign var=header value=$overlay.head @>
 	<@ if $header !== false @>
-	<div class="header"><@ $header @></div>
+	<div class="outerHeader"><div class="header"><@ $header @></div></div>
 	<@ /if @>
 	
 	<@ assign var=content value=$overlay.content @>

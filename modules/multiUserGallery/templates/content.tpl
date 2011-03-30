@@ -1,10 +1,10 @@
-<h2>Rubriken dieser Bilder</h2>
+<@*<h2>Rubriken dieser Bilder</h2>
 <div>
 <@ foreach from=$taxonomie item=tax key=key @>
 	<a href="#<@ if $images @>gallery_id=<@ $images[0]->gallery_id @>&<@ /if @>taxonomie_id=<@ $tax->id @>"><@ $tax->title @></a>, 
 <@ /foreach @>	
 </div>
-
+*@>
 
 <@ if $galleries @>
 <h2>Neueste Galerien</h2>

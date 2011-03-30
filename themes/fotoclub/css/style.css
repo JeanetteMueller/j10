@@ -1,0 +1,136 @@
+#container{
+	width:900px;
+	margin: 0 auto;
+	float:none;
+}
+.slot{
+	background:none;
+}
+.slot_sidebar_left,
+.slot_sidebar_right{
+	width:250px;
+}
+.slot_content{
+	width:390px;
+	padding:0 5px;
+}
+.slot_content small{
+	float:left;
+	width:100%;
+	height:16px;
+}
+
+.slot_sidebar_left .modul,
+.slot_sidebar_right .modul{
+	float:left;
+	width:250px;
+}
+
+.slot .modul .outerHeader{
+	background:url('../images/module.head.background.left.png') top left no-repeat;	
+}
+.slot .modul .outerHeader .header{
+	padding: 0 15px 0 15px;
+	height:20px;
+	color:#fff;
+	line-height: 20px;
+	font-weight:bold;
+	background:url('../images/module.head.background.right.png') top right no-repeat;
+}
+.slot .modul .outerHeader .header a{
+	color:#fff;
+}
+
+.slot .modul .content{
+	background:none;
+	width:238px;
+	border:1px solid #ddd;
+	padding:5px;
+}
+.slot_header .modul .content{
+	width:890px;
+}
+.slot_content .modul .content{
+	width:378px;
+}
+.slot_footer .modul .content{
+	width:890px;
+}
+.slot .modul .footer{
+	background:url('../images/module.footer.background.png') top left repeat-x;
+	height:16px;
+	line-height:14px;
+	padding:0 5px;
+	width:240px;
+	float:left;
+	text-align:right;
+	color:#999;
+}
+.slot .modul .footer a{
+	color:#999;
+}
+.slot_content .modul .footer{
+	width:380px;
+}
+
+
+
+
+#overlay #overlay_closeButton{
+	
+	top:15px;
+	right:-17px;
+}
+#overlay .modul{
+	margin: 0px auto;
+	padding: 0px;
+	width:600px;
+	background:url('../images/module.head.background.png') top left repeat-x;;
+	border:none;	
+	
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	
+	-moz-border-radius-topright: 15px;
+	border-top-right-radius: 15px;
+	
+	-moz-border-radius-topleft: 15px;
+	border-top-left-radius: 15px;
+	
+	-moz-box-shadow: 0px 0px 25px #fff;
+	-webkit-box-shadow: 0px 0px 25px #fff;
+	box-shadow: 0px 0px 25px #fff;
+	
+}
+	#overlay .modul .outerHeader {
+		
+		
+	}
+	#overlay .modul .outerHeader .header{
+		padding: 0 15px 0 15px;
+		height:20px;
+		color:#fff;
+		line-height: 20px;
+		font-weight:bold;
+	}
+	#overlay .modul .header,
+	#overlay .modul .content,
+	#overlay .modul .footer{
+		padding: 0px;
+	}
+	
+	#overlay .modul .content,
+	#overlay .modul .footer{
+		padding: 10px;
+		background:#fff;
+	}	
+	#overlay .modul .header{
+
+		border:none;	
+	}
+	#overlay .modul .footer{
+
+		border-top:2px solid #999;	
+	}
+	
+
