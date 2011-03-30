@@ -12,7 +12,7 @@ class Modules extends Includes{
 	public function getAllModules(){
 		
 		$db = $this->getDatabase();
-		
+		$db->whereAdd('deleted IS NULL');
 		return $db->find('jx_modul');
 	}
 	public function getAllModuleIncludeFiles(){
@@ -39,12 +39,14 @@ class Modules extends Includes{
 		
 		if ($siteobject->id == $slotobject->site_id) {
 			
-
+			
 			$db->whereAdd('jx_modul_to_slots_in_site.slot_id', $slotobject->id);
 			$db->whereAdd('jx_modul_to_slots_in_site.site_id = '.$siteobject->id.' OR jx_modul_to_slots_in_site.site_id IS NULL');
 			$db->whereAdd('jx_modul_to_slots_in_site.deleted IS NULL');
 			$db->joinAdd('jx_modul_to_slots_in_site', 'jx_modul.id = jx_modul_to_slots_in_site.modul_id');
 			$db->orderBy('sort');
+			$db->whereAdd('jx_modul_to_slots_in_site.deleted IS NULL');
+			$db->whereAdd('jx_modul.deleted IS NULL');
 			$moduls = $db->find('jx_modul');
 			
 			return $this->prepareModuleList($moduls);
@@ -58,12 +60,13 @@ class Modules extends Includes{
 			$db = $this->getDatabase();
 
 			$db->whereAdd('path', $path);
+			$db->whereAdd('deleted IS NULL');
 			$moduls = $db->find('jx_modul');
 			
 			$results = $this->prepareModuleList($moduls);
-		
-			return reset($results);
-
+			if(count($results) > 0){
+				return reset($results);
+			}
 		}
 		return false;
 	}
@@ -72,12 +75,27 @@ class Modules extends Includes{
 		
 		$db->whereAdd('jx_modul_to_slots_in_site.slot_id', $slotobject->id);
 		$db->joinAdd('jx_modul_to_slots_in_site', 'jx_modul.id = jx_modul_to_slots_in_site.modul_id');
+		$db->whereAdd('jx_modul_to_slots_in_site.deleted IS NULL');
+		$db->whereAdd('jx_modul.deleted IS NULL');
 		$moduls = $db->find('jx_modul');
 		
 		return $this->prepareModuleList($moduls);
 	}
 	private function prepareModuleList($moduls){
 		$results = array();
+		
+		if($this->core->getget('type') == 'site' && $this->getRights()->hasRightFor($this->core->getSession('user_id'), false, 'reorderModules')){
+			
+			$reorder = new stdClass();
+			$reorder->path = 'admin_reorderModules';
+			$reorder->id = rand(1000, 9999);
+			$reorder->admin = true;
+			require_once('modules/admin_reorderModules/admin_reorderModules.php');
+			$reorder->object = new Module_Admin_reorderModules($this->core, 0, 'admin_reorderModules');
+			$reorder->object->setup(null);
+			$results[] = $reorder;
+		}
+		
 		foreach($moduls as $module){
 			if(file_exists('modules/'.$module->path.'/'.$module->path.'.php')){
 				
@@ -85,13 +103,20 @@ class Modules extends Includes{
 				
 				$modulName = 'Module_'.ucfirst($module->path);
 				
-				$module->object = new $modulName($this->core, $module->path);
+				$module->object = new $modulName($this->core, $module->id, $module->path);
+				if(!empty($module->params)){
+					$module->object->setup($module->params);
+				}else{
+					$module->object->setup($this->core->getget('params', null));
+				}
 				$results[] = $module;
 
 				
 				
 			}
 		}
+
+
 		return $results;
 	}
 	private function parseExtensionInfo($file){

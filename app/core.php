@@ -12,7 +12,7 @@ class Core extends core_last{
 		$this->buildMainCore();
 		
 		
-		switch ($this->GetGet('type')) {
+		switch ($this->getget('type')) {
 			default:
 			case 'site':
 				$this->buildSiteContent();
@@ -44,12 +44,12 @@ class Core extends core_last{
 			case 'module':
 				if(isset($this->includes['Modules'])){	
 					
-					$module = $this->GetGet('module');
-					$params = $this->GetGet('params');
+					$module = $this->getget('module');
+					$params = $this->getget('params');
+					//var_dump($params);
 					
 					$moduleDataObject = $this->getModules()->loadModule($module);
 					$moduleObject = $moduleDataObject->object;
-					$moduleObject->setup($params);
 					
 					echo json_encode(array(		'module'	=>$module, 
 												'params'	=>$params,
@@ -77,6 +77,11 @@ class Core extends core_last{
 					$Template->assign('modul', $moduleObject);
 					
 					$overlay = $moduleObject->object->$functionName();
+					
+					if($overlay === false){
+						echo json_encode(false);
+						die();
+					}
 					
 					if(!is_array($overlay)){
 						$overlay = array();

@@ -39,7 +39,13 @@ class Converter extends Includes{
 		
 		
 	}
-	
+	public function trim_array(array $array,$int){
+		$newArray = array();
+		for($i=0; $i<$int; $i++){
+			array_push($newArray,$array[$i]);
+		}
+		return (array)$newArray;
+	}
 	/**
 	 * Diese Funktion prüft ob ein Geldwert mit Kommastellen
 	 * übergeben wurde und setzt den Ausgabewert immer auf #,##

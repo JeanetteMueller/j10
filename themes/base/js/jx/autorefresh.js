@@ -19,11 +19,13 @@ jx.autoRefresh = {
 	},
 	setRefreshButton : function (){
 		$('.refreshbutton').unbind('click.refreshbutton').bind('click.refreshbutton', function(){
-			var string = $(this).parent().parent().parent().parent().attr('id').split('__').pop();
-
+			
+			var modulid = $(this).parent().parent().parent().parent().attr('id');
+			var string = modulid.split('__').pop();
+			
 			var id = string.split('_').pop();
 			var name = string.split('_').shift();
-			var params = false;
+			var params = window[modulid+'_params'];
 
 			var request = [{id:id, name:name, params:params}];
 
@@ -39,10 +41,12 @@ jx.autoRefresh = {
 		if(request == null){
 			request = [];
 			$('.refresh').each(function(){
-				var string = $(this).attr('id').split('__').pop();
+				var modulid = $(this).attr('id');
+				var string = modulid.split('__').pop();
 				var id = string.split('_').pop();
 				var name = string.split('_').shift();
-				var params = false; //$(this).children('div.params').text();
+				
+				var params = window[modulid+'_params'];
 			
 				request.push({id:id, name:name, params:params});
 			});

@@ -2,31 +2,28 @@
 
 class Module_Register extends Module{
 	
-	public function __construct($core, $name){
-		parent::__construct($core, $name);
-	}
 	public function ajax_isRegistered(){
 		
-		$parameter  = $this->core->getPost('params');
+		$parameter  = $this->getPost('params');
 		
 		$anfrage = $this->cleanParams($parameter);
 		
-		return $this->core->getUser()->checkIfIsRegistered($anfrage);
+		return $this->getUser()->checkIfIsRegistered($anfrage);
 
 	}
 	public function overlay_form(){
 		
 		$Template = $this->getMyTemplate();
 		
-		$date = $this->core->getTools()->Date;
+		$date = $this->getTools()->Date;
 		$date->setPrefix(' – ');
 		
 		$Template->assign('days',  $date->getDays());
 		$Template->assign('month', $date->getMonth());
 		$Template->assign('years', $date->getYears());
-		$Template->assign('genders', $this->core->getUser()->getGenders());
+		$Template->assign('genders', $this->getUser()->getGenders());
 		
-		$params = $this->core->getPost('params');
+		$params = $this->getPost('params');
 
 		if($params['module_register_action'] == 'register'){
 			$Template->assign('username', $params['module_register_username']);
@@ -54,14 +51,14 @@ class Module_Register extends Module{
 	
 	public function overlay_register(){
 		
-		$params = $this->core->getPost('params');
+		$params = $this->getPost('params');
 		$registerFailed = false;
 		if($params['module_register_action'] == 'register'){
 			
 			//user anlegen
 			$anfrage = $this->cleanParams($params);
 			
-			if($this->core->getUser()->register($anfrage)){
+			if($this->getUser()->register($anfrage)){
 				$this->assign('register', true); 
 			}else{
 				$registerFailed = true;

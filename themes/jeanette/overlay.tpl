@@ -1,3 +1,5 @@
+<@ if $overlay !== false @>
+
 <div id="modul__<@ $modul->path @>_<@ $modul->id @>" title="<@ $modul->path @>" class="modul<@ if $modul->object->autoRefresh() @> refresh<@ /if @> is_<@ $modul->path @>">
 	
 	
@@ -19,3 +21,4 @@
 	
 	
 </div>
+<@ /if @>

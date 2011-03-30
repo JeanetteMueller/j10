@@ -14,9 +14,7 @@ class Module_Navigationbar extends Module{
 
 	public function getContent(){
 
-		$Sites = $this->core->getSites();
-
-		$this->assign('tree', $Sites->getNavigationTree($this->core->Get('root', 0)));
+		$this->assign('tree', $this->getSites()->getNavigationTree($this->Get('root', 0)));
 	
 	}
 

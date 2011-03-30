@@ -277,6 +277,8 @@ button {  width: auto; overflow: visible; }
 body{
 	width:100%;
 }
+
+
 .hide{
 	display:none;
 }
@@ -409,18 +411,47 @@ body{
 	display:inline;
 }
 
-#overlay div label{
-	padding:0;
-	margin:0;
-	width:38%;
+
+
+form fieldset .info{
+	font-size:80%;
+	float:left;
+	width:50%;
+	padding: 5px 0 0 45%;
+}
+form fieldset legend{
+	font-weight:bold;
+	text-decoration:underline;
+	font-size:120%;
+	padding: 0 0 7px 0;
+}
+form fieldset div{
+	padding: 7px 0 7px 0;
+	width:100%;
 	float:left;
 }
-#overlay div input{
+form fieldset div label{
+	padding:0;
+	margin:0;
+	width:45%;
+	float:left;
+	font-weight:bold;
+	overflow:hidden;
+}
+form fieldset div input, form fieldset div select{
 	padding:0;
 	margin:0;
 	float:left;
-	width:60%;
+	width:50%;
 }
+form fieldset div select{
+	width: auto;
+}
+form fieldset div .is_submit{
+	float:left;
+	width:100%;
+}
+
 
 select.error,
 input.error{

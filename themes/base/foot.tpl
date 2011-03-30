@@ -1,8 +1,7 @@
 <!-- Javascript at the bottom for fast page loading -->
 
-<!-- Grab Google CDN's jQuery. fall back to local if necessary -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script>!window.jQuery && document.write('<script src="<@ $EXTERNALS_DIR @>jquery/jquery.js"><\/script>')</script>
+<script src="<@ $EXTERNALS_DIR @>jquery/jquery.js"></script>
+<script src="<@ $EXTERNALS_DIR @>jquery/jquery-ui-1.8.11.custom.min.js"></script>
 
 <!-- load basic JS files -->
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx.js?v=1"></script>

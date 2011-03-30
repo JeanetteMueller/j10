@@ -1,1 +1,1 @@
-<h3>Online User (<@ math equation='rand(0,10000)' @>)</h3>
+<h3>Online User (<@ $count @>)</h3>

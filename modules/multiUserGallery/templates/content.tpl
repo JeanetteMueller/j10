@@ -15,6 +15,7 @@
 		<@ image file=$gallerie->titleimage base="multiUserGallery" link=false width=140 height=auto alt=$gallerie->title title=false @>
 		
 		<@ $gallerie->title @></a>
+		von <@ $gallerie->username @>
 	</div>
 <@ /foreach @>
 
@@ -33,6 +34,7 @@
 		<@ image file=$image->id base="multiUserGallery" link=false width=140 height=auto alt=$image->title @>
 		
 		<@ $image->title @></a>
+		von <@ $image->username @>
 	</div>
 <@ /foreach @>
 

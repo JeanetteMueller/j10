@@ -25,6 +25,7 @@ class Sites extends Includes{
 		$db = $this->getDatabase();
 		
 		$db->whereAdd('path', $site);
+		$db->whereAdd('deleted IS NULL');
 		$siteObjects = $db->find('jx_sites');
 		if(count($siteObjects) > 0){
 			return reset($siteObjects);
@@ -54,6 +55,7 @@ class Sites extends Includes{
 		
 		$db->whereAdd('id', 		$slotid);
 		$db->whereAdd('site_id', 	$siteobject->id);
+		$db->whereAdd('deleted IS NULL');
 		
 		$result = $db->find('jx_slots');
 		if (count($result) > 0) {
@@ -66,12 +68,14 @@ class Sites extends Includes{
 		$db = $this->getDatabase();
 		
 		$db->whereAdd('site_id', $siteobject->ID);
+		$db->whereAdd('deleted IS NULL');
 		return $db->find('jx_slots');
 		
 	}
 	public function getNavigationTree($root=0){
 		$db = $this->getDatabase();
 		$db->whereAdd('root_id', $root);
+		$db->whereAdd('deleted IS NULL');
 		$db->orderBy('sort');
 		$sites = $db->find('jx_sites');
 		

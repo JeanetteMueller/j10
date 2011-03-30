@@ -26,7 +26,7 @@
 	width:250px;
 }
 
-.slot .modul .outerHeader {
+.slot .modul .outerHeader{
 	background:url('../images/module.head.background.left.png') top left no-repeat;	
 }
 .slot .modul .outerHeader .header{
@@ -41,17 +41,20 @@
 	color:#fff;
 }
 
-.slot .modul .content,
 .slot .modul .content{
 	background:none;
 	width:238px;
-	border-left:1px solid #ddd;
-	border-right:1px solid #ddd;
-	border-bottom:1px solid #ddd;
+	border:1px solid #ddd;
 	padding:5px;
+}
+.slot_header .modul .content{
+	width:890px;
 }
 .slot_content .modul .content{
 	width:378px;
+}
+.slot_footer .modul .content{
+	width:890px;
 }
 .slot .modul .footer{
 	background:url('../images/module.footer.background.png') top left repeat-x;
@@ -130,26 +133,4 @@
 		border-top:2px solid #999;	
 	}
 	
-.is_multiUserGallery .content{
-	position:relative;
-}	
-.is_multiUserGallery .content a.is_gallery_showImageLast,
-.is_multiUserGallery .content a.is_gallery_showImageNext{
-	position:absolute;
-	top:0;
-	text-indent:10000px;
-	width:50%;
-	height:100%;
-}
-.is_multiUserGallery .content a.is_gallery_showImageLast{
-	left:0;
-}
-.is_multiUserGallery .content a.is_gallery_showImageNext{
-	right:0;
-	text-align:right;
-}
-.is_multiUserGallery .content a.is_gallery_showImageLast:hover,
-.is_multiUserGallery .content a.is_gallery_showImageNext:hover{
-	background:#000;
-	opacity:0.1;
-}
+

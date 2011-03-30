@@ -1,0 +1,15 @@
+.is_page h1{
+	font-size:200%;
+}
+.is_page .dachzeile{
+	width:100%;
+	display:block;
+	font-size:50%;
+}
+.is_page .content div{
+	padding: 20px 0 0 0;
+}
+.is_page .vorspann{
+
+	font-weight:bold;
+}

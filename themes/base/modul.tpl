@@ -1,5 +1,11 @@
 <div id="modul__<@ $modul->path @>_<@ $modul->id @>" title="<@ $modul->path @>" class="modul<@ if $modul->object->autoRefresh() @> refresh<@ /if @> is_<@ $modul->path @>">
 	
+	<script type="text/javascript">
+		
+		modul__<@ $modul->path @>_<@ $modul->id @>_params = <@ $modul->object->params|@json_encode @>; 
+	
+	</script>
+	
 	<@ assign var=header value=$modul->object->loadHeader() @>
 	<@ if $header !== false @>
 	<div class="header"><@ $header @></div>

@@ -1,5 +1,6 @@
-<ul>
-	<li><a href="javascript:;" class="module_login_lostpassword">Passwort vergessen</a></li>
-	<li><a href="javascript:;" class="module_login_register">Register</a></li>
-</ul>
 
+<@ if $loggedIn == true @>
+	<@ include file="footer.logged_in.tpl" @>
+<@ else @>
+	<@ include file="footer.logged_out.tpl" @>
+<@ /if @>

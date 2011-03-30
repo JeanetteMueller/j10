@@ -64,7 +64,12 @@ jx.overlay = {
 					type: 		"POST",
 					context: 	document.body, 
 					success: 	function(result){
-
+						
+						if(result === 'false'){
+							jx.overlay.remove();
+							return;
+						}
+						
 						jQuery('#overlay').children('.modul').remove().end().append(result);
 
 						jx.overlay.setBindings();
@@ -84,7 +89,6 @@ jx.overlay = {
 		
 		jx.parseParameter(config);
 		
-		
 		jQuery.ajax({ 	
 			url: 		jx.root+"overlay/"+modul,
 			//data: 		{params: config.config}, 
@@ -93,11 +97,13 @@ jx.overlay = {
 			context: 	document.body, 
 			success: 	function(result){
 				
-				
-				
+				if(result === 'false'){
+					
+					jx.overlay.remove();
+					return;
+				}
 				
 				jQuery('#overlay').children('.modul').remove().end().append(result);
-				
 				
 				console.log('callback start');
 				if(typeof callback !== 'undefined'){
@@ -106,9 +112,6 @@ jx.overlay = {
 				console.log('callback end');
 				
 				jx.overlay.setBindings();
-				
-				
-					
 				
 			}
 		});

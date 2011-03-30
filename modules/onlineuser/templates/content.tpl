@@ -1,6 +1,6 @@
 <ul>
 	<@ foreach from=$list item=user @>
-		<li><@ $user @></li>
+		<li><@ $user.username @></li>
 	<@ /foreach @>
 </ul>
 

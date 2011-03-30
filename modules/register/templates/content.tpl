@@ -2,23 +2,23 @@
 	Registration hat geklappt. Bitte aktivieren Sie ihren Account über den Link den wir ihnen soeben per Mail zugestellt haben.
 
 <@ else @>
-<form method="POST" action="register">
+<form method="post" action="register">
 	<fieldset>
-		<legend>Zugansdaten</legend>
+		<legend>Ihre Zugansdaten</legend>
 	
 		<div>
 			<label for="module_register_username">Benutzername:</label>
 			<input type="text" name="module_register_username" value="<@ $username @>" />
-			Der benutzername muss mindestens 4 Zeichen enthalten.
+			<p class="info">Der Benutzername muss mindestens 4 Zeichen enthalten.</p>
 		</div>
 		<div>
 			<label for="module_register_password">Passwort:</label>
 			<input type="password" name="module_register_password" value="" />
 		</div>
 		<div>
-			<label for="module_register_password2">Passwort:</label>
+			<label for="module_register_password2">Passwort wiederholen:</label>
 			<input type="password" name="module_register_password2" value="" />
-			Die Passwörter müssen mindestens 6-stellig und in beiden Feldern identisch sein.
+			<p class="info">Die Passwörter müssen mindestens 6-stellig und in beiden Feldern identisch sein.</p>
 		</div>
 		<div>
 			<label for="module_register_email">E-Mail:</label>
