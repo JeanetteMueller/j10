@@ -3,6 +3,7 @@
 <@ include file=../base/header.tpl @>
 
 <header>
+	<a href="<@ $ROOT @>">Startseite</a>
 	<@ slot title=header @>
 </header>
 

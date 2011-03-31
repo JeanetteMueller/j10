@@ -8,6 +8,8 @@ class Module {
 	public $params;
 	public $Template;
 	
+	public $reorder = false;
+	
 	public function __call($functionName, $params){
 		
 		$prefix = substr($functionName, 0, 3);
@@ -60,6 +62,8 @@ class Module {
 		$Template = $this->core->getTemplate(true);
 		$Template->setTemplateToModule($this->name);
 		
+		
+		
 		return $Template;
 	}
 	
@@ -71,13 +75,16 @@ class Module {
 	public function fetch($template){
 
 		$this->Template->prepareThemeDirectories($template);
-		
+		$this->assign('reorder', $this->reorder);
+
 		return $this->Template->fetch($template);
 
 	}
 	
 	
 	public function setup($params){
+		
+		
 		if(!empty($params)){
 			if(is_string($params)){
 				$params = json_decode($params, true);

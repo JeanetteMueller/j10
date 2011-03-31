@@ -27,7 +27,12 @@ class Core extends core_last{
 						$moduleDataObject = $this->getModules()->loadModule($module['name']);
 
 						$moduleObject = $moduleDataObject->object;
-						$moduleObject->setup($module['params']);
+						if(isset($module['params'])){
+							$moduleObject->setup($module['params']);
+						}else{
+							$moduleObject->setup(NULL);
+						}
+						
 						
 						$results[] = array(			'module'	=>$module, 
 													'params'	=>$module['params'],
@@ -51,12 +56,27 @@ class Core extends core_last{
 					$moduleDataObject = $this->getModules()->loadModule($module);
 					$moduleObject = $moduleDataObject->object;
 					
-					echo json_encode(array(		'module'	=>$module, 
-												'params'	=>$params,
-												'content'	=>$moduleObject->loadContent(),
-												'header'	=>$moduleObject->loadHeader(),
-												'footer'	=>$moduleObject->loadFooter()
-												));
+					switch($this->getget('render', 'json')){
+						case 'modul':
+							$moduleDataObject->object->setup($params);
+							$template = $moduleObject->getTemplate();
+							$template->assign('modul', $moduleDataObject);
+							echo $template->fetch('modul.tpl');
+						break;
+						default:
+						case 'json':
+						
+						echo json_encode(array(		'module'	=>$module, 
+													'params'	=>$params,
+													'content'	=>$moduleObject->loadContent(),
+													'header'	=>$moduleObject->loadHeader(),
+													'footer'	=>$moduleObject->loadFooter()
+													));
+													
+						break;
+					}
+					
+					
 					die();
 				}
 			break;

@@ -12,6 +12,12 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
+<meta name="id" content="<@ $site->id @>" >
+<meta name="root_id" content="<@ $site->root_id @>" >
+<meta name="sort" content="<@ $site->sort @>" >
+<meta name="path" content="<@ $site->path @>" >
+<meta name="title" content="<@ $site->title @>" >
+
 <!--  Mobile Viewport Fix
       j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag 
 device-width : Occupy full width of the screen in its current orientation

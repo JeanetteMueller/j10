@@ -21,4 +21,8 @@
 	<div class="footer"><@ $footer @></div>
 	<@ /if @>
 	
+	
+	<@ if $modul->object->reorder @>
+		<a href="javascript:;" class="is_removeModule">&uarr; Modul entfernen</a>
+	<@ /if @>
 </div>

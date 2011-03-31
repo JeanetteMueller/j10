@@ -1,7 +1,9 @@
 <?php
 
 class Module_Onlineuser extends Module{
-		
+	
+	private $_itemcount = 5;
+	
 	public function autoRefresh(){
 		return true;
 	}
@@ -24,7 +26,13 @@ class Module_Onlineuser extends Module{
 			}
 		}
 		
-		$result = $this->getUser()->getUsersListedAsLoggedIn($this->params['itemcount']);
+		if(is_array($this->params) && isset($this->params['itemcount'])){
+			$itemcount = $this->params['itemcount'];
+		}else{
+			$itemcount = $this->_itemcount;
+		}
+		
+		$result = $this->getUser()->getUsersListedAsLoggedIn($itemcount);
 		
 		$users = $result['list'];
 		$count = $result['count'];

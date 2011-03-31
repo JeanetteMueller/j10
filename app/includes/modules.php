@@ -92,6 +92,7 @@ class Modules extends Includes{
 			$reorder->admin = true;
 			require_once('modules/admin_reorderModules/admin_reorderModules.php');
 			$reorder->object = new Module_Admin_reorderModules($this->core, 0, 'admin_reorderModules');
+			//$reorder->object->reorder = true;
 			$reorder->object->setup(null);
 			$results[] = $reorder;
 		}
@@ -104,6 +105,11 @@ class Modules extends Includes{
 				$modulName = 'Module_'.ucfirst($module->path);
 				
 				$module->object = new $modulName($this->core, $module->id, $module->path);
+				
+				if($this->getRights()->hasRightFor($this->core->getSession('user_id'), false, 'reorderModules')){
+					$module->object->reorder = true;	
+				}
+				
 				if(!empty($module->params)){
 					$module->object->setup($module->params);
 				}else{

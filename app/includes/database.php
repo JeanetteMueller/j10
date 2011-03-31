@@ -20,7 +20,7 @@ class Database extends Includes{
 	private $fields		= array();
 	
 	public $last_query	= '';
-	private $sqlFunktionen = array('NOW()');
+	private $sqlFunktionen = array('NULL', 'NOW()');
 	private $mdb2;
 	
 	public function __construct($core, $name){

@@ -7,8 +7,19 @@ nav ul li{
 	line-height:20px;
 }
 header{
-	padding:160px 0 20px 0;
+	float:left;
+	width:100%;
+	padding:0 0 20px 0;
 	background:#fff url('../images/head.background.png') top left no-repeat;
+}
+header a,
+header a:active, 
+header a:visited, 
+header a:hover{
+	width:100%;
+	float:left;
+	text-indent:-10000px;
+	height:160px;
 }
 #container{
 	width:900px;
@@ -17,6 +28,7 @@ header{
 }
 .slot{
 	background:none;
+
 }
 .slot_sidebar_left,
 .slot_sidebar_right{

@@ -27,17 +27,63 @@ class Module_Admin_reorderModules extends Module{
 				$db->whereAdd('id', $modultoslot_id);
 				$results = $db->find('jx_modul_to_slots_in_site');
 				
-				$eintrag = reset($results);
+				if(count($results) > 0){
+					$eintrag = reset($results);
+					
+					$eintrag->setValue('slot_id', $slot_id);
+					$eintrag->setValue('sort', $sort);
+
+					$eintrag->syncronize();
+				}
 				
-				$eintrag->setValue('slot_id', $slot_id);
-				$eintrag->setValue('sort', $sort);
 				
-				$eintrag->syncronize();
+				
 				
 				$sort = $sort + 10;
 			}
 			
 		}
+		
+		return true;
+	}
+	public function ajax_insertNewModuleInPlace(){
+		
+		$params  = $this->getPost('params');
+		
+		$db = $this->getDatabase();
+		$db->insertValue('created', 'NOW()');
+		$db->insertValue('modul_id', $params['modul_id']);
+		$db->insertValue('slot_id', $params['slot_id']);
+		$db->insertValue('site_id', $params['site_id']);
+		$db->insertValue('sort', $params['sort']);
+		$db->insertValue('params', $params['params']);
+		
+		$result = $db->insert('jx_modul_to_slots_in_site');
+		
+		return true;
+	}
+	public function ajax_removeModuleFromPlace(){
+		$params  = $this->getPost('params');
+		
+		$db = $this->getDatabase();
+		
+		$db->whereAdd('id', $params['modulslot_id']);
+		$results = $db->find('jx_modul_to_slots_in_site');
+		
+		if(count($results) > 0){
+			$eintrag = reset($results);
+			
+			$eintrag->setValue('deleted', 'NOW()');
+
+			$eintrag->syncronize();
+		}
+		return true;
+	}
+	public function getContent(){
+		
+		$modules = $this->getModules()->getAllModules();
+		
+		$this->assign('modules', $modules);
 		
 		return true;
 	}

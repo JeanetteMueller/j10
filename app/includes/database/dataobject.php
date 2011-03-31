@@ -10,6 +10,8 @@ class dataobject {
 	public $edited 		= null;
 	public $deleted 	= null;
 	
+	private $sqlFunktionen = array('NULL', 'NOW()');
+	
 	public function __construct($core){
 		$this->_core = $core;
 	}
@@ -34,7 +36,7 @@ class dataobject {
 
 				foreach($this->_changed as $key){
 					
-					if(in_array($this->$key, array('now()'))){
+					if(in_array($this->$key, $this->sqlFunktionen )){
 						$updateSql.= $key.' = '.$this->$key.',';
 					}else{
 						$updateSql.= $key.' = "'.$this->$key.'",';
