@@ -83,61 +83,38 @@ jx.modules.admin_reorderModules = {
 				
 				$(this).val('');
 				
+				var site_id = $('meta[name=id]').attr('content');
+				if( window.confirm('Für alle Webseiten oder nur diese eine? OK = Alle')){
+					site_id = 'NULL';
+				}
+				var params = 'NULL';
+				var newParams = window.prompt('Parametereingabe falls benötigt');
+				if(newParams !== '' && newParams !== null && newParams !== 'NULL'){
+					params = newParams;
+				}
+				
 				var data = {
-					path: modul,
-					id: modul_id
+					modul: modul,
+					modul_id: modul_id,
+					site_id: site_id,
+					slot_id: $(selector).parentsUntil('.slot').attr('id').split('_').pop(),
+					sort: 999,
+					params: params
 				};
 				
 				jQuery.ajax({ 	
-					url: 		jx.root+"module/"+modul+'?render=modul',
+					url: 		jx.root+'ajax/admin_reorderModules/insertNewModuleInPlace',
 				 	dataType: 	'html',
 					data:  		{params: data},
 					type: 		"POST",
 					context: 	document.body, 
 					success: 	function(html){
-
-						if(html !== 'false' ){
-							$(selector).parent().parent().parent().append(html);
-							
-							var site_id = $('meta[name=id]').attr('content');
-							if( window.confirm('Für alle Webseiten oder nur diese eine? OK = Alle')){
-								site_id = 'NULL';
-							}
-							
-							var params = 'NULL';
-							var newParams = window.prompt('Parametereingabe falls benötigt');
-							if(newParams !== ''){
-								params = newParams;
-							}
-							
-							var insertdata = {
-								modul_id: modul_id,
-								site_id: site_id,
-								slot_id: $(selector).parent().parent().parent().attr('id').split('_').pop(),
-								sort: 999,
-								params: params
-							};
-							
-							jQuery.ajax({ 	
-								url: 		jx.root+'ajax/admin_reorderModules/insertNewModuleInPlace',
-							 	dataType: 	'json',
-								data:  		{params: insertdata},
-								type: 		"POST",
-								context: 	document.body, 
-								success: 	function(html){
-
-									if(html !== 'false' ){
-										
-									}
-								}
-							});
-							
-							
-							
-							
-						}
+						$(selector).parentsUntil('.slot').append(html);
+						
+						jx.Listeners.init();
 					}
 				});
+				
 			});
 		});
 	}, 
@@ -149,8 +126,8 @@ jx.modules.admin_reorderModules = {
 			
 			$(this).unbind('click.removemodul').bind('click.removemodul', function(){
 				
-				var target = $(this).parent();
-				var id = $(this).parent().attr('id').split('_').pop();
+				var target = $(this).parentsUntil('.modul');
+				var id = $(this).parentsUntil('.modul').attr('id').split('_').pop();
 				
 				var data = {modulslot_id: id};
 				

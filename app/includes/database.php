@@ -54,7 +54,9 @@ class Database extends Includes{
 	}
 	public function whereAdd($where, $value='', $type="=", $additionType="AND"){
 		
-		if($value !== ''){
+		if($value === NULL || $value == 'NULL'){
+			$where = $where." IS NULL";
+		}elseif($value !== ''){
 			$where = $where." ".$type." '".mysql_escape_string($value)."'";
 		}
 		

@@ -60,6 +60,36 @@ class Module_Admin_reorderModules extends Module{
 		
 		$result = $db->insert('jx_modul_to_slots_in_site');
 		
+		
+		$db->whereAdd('modul_id', $params['modul_id']);
+		$db->whereAdd('slot_id', $params['slot_id']);
+		$db->whereAdd('site_id', $params['site_id']);
+		$db->orderBy('id DESC');
+		
+		$results = $db->find('jx_modul_to_slots_in_site');
+		
+		//echo $db->last_query;
+		
+		if(count($results) > 0){
+			$result = reset($results);
+
+			//var_dump($result);
+
+			$moduleDataObject = $this->getModules()->loadModule($params['modul']);
+			$moduleDataObject->id = $result->id;
+			$moduleObject = $moduleDataObject->object;
+
+			//var_dump($result->params);
+			
+			$moduleDataObject->object->setup($result->params);
+			$template = $moduleObject->getTemplate();
+			$template->assign('modul', $moduleDataObject);
+			die( $template->fetch('modul.tpl') );
+
+		}
+		
+		//{"contentid":2}
+		
 		return true;
 	}
 	public function ajax_removeModuleFromPlace(){

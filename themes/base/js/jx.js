@@ -1,5 +1,5 @@
 jx = {
-	debug : true,
+	debug : false,
 	
 	root : '/',
 	url : window.location.href.split('.html').shift(),

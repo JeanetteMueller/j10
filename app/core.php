@@ -50,7 +50,7 @@ class Core extends core_last{
 				if(isset($this->includes['Modules'])){	
 					
 					$module = $this->getget('module');
-					$params = $this->getget('params');
+					$params = $this->getget('params', NULL);
 					//var_dump($params);
 					
 					$moduleDataObject = $this->getModules()->loadModule($module);

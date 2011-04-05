@@ -411,6 +411,15 @@ body{
 	display:inline;
 }
 
+.slot .modul .admin{
+	border:1px solid #f00;
+	float:left;
+	width:100%;
+	background:#fff6f6;
+}
+.slot .modul .admin a{
+	color:#000;
+}
 
 
 form fieldset .info{
