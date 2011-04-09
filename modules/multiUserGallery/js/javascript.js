@@ -158,7 +158,10 @@ jx.modules.multiUserGallery = {
 		jx.overlay.init('multiUserGallery/showAddGallery');
 	},
 	showAddImageForm : function(){
-		jx.overlay.init('multiUserGallery/showAddImage');
+		var gallery_id = $(this).attr('id').split('__').pop();
+		
+		console.debug(gallery_id);
+		jx.overlay.init('multiUserGallery/showAddImage', {gallery_id:gallery_id});
 	}
 }
 

@@ -6,6 +6,8 @@ class Module_MultiUserGallery extends Module{
 		parent::setup($params);
 		
 		$this->Assign('user_id', $this->getSession('user_id'));
+		
+		$this->form_AddImage();
 	}
 	public function ajax_showGallery(){
 		
@@ -106,12 +108,13 @@ class Module_MultiUserGallery extends Module{
 				$db->insertValue('title', $params['module_multiusergallery_title']);
 				$db->insertValue('description', $params['module_multiusergallery_description']);
 			
+				if($db->insert('jx_module_multiUserGallery_galleries')){
+
+					$Template->Assign('addGallery', true);
+				}
 			}
 
-			if($db->insert('jx_module_multiUserGallery_galleries')){
-				
-				$Template->Assign('addGallery', true);
-			}
+			
 			
 			return array(
 				'head'		=> $Template->fetch('addGallery.head.tpl'),
@@ -124,7 +127,78 @@ class Module_MultiUserGallery extends Module{
 	public function overlay_showAddImage(){
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addImage')){
 			$Template = $this->getMyTemplate();
+			
+			$params = $this->getPost('params');
+			$Template->Assign('gallery_id', $params['gallery_id']);
 		
+			return array(
+				'head'		=> $Template->fetch('addImage.head.tpl'),
+				'content'	=> $Template->fetch('addImage.content.tpl'),
+				'footer'	=> $Template->fetch('addImage.footer.tpl')
+			);
+		}
+		return false;
+	}
+	public function form_AddImage(){
+		
+		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addImage')){
+			$Template = $this->getMyTemplate();
+			$Template->Assign('addImage', false);
+			
+		
+			if($this->getPost('module_multiusergallery_action') == 'addImage'){
+				
+				$gallery_id = $this->getPost('module_multiusergallery_gallery_id');
+				
+				$db = $this->getDatabase();
+				
+				$db->insertValue('created', 'NOW()');
+				$db->insertValue('user_id', $this->getSession('user_id'));
+				$db->insertValue('gallery_id', $gallery_id);
+				$db->insertValue('title', $this->getPost('module_multiusergallery_title'));
+				$db->insertValue('description', $this->getPost('module_multiusergallery_description'));
+				
+				if($db->insert('jx_module_multiUserGallery_images')){
+
+					$Template->Assign('addImage', true);
+					
+					$db->whereAdd('user_id', $this->getSession('user_id'));
+					$db->whereAdd('title', $this->getPost('module_multiusergallery_title'));
+					$db->orderBy('id DESC');
+					$db->limit('0,1');
+					$results = $db->find('jx_module_multiUserGallery_images');
+					
+					$lastEntry = reset($results);
+					$id = $lastEntry->id;
+					
+					
+					$target_path = "files/originals/multiUserGallery/";
+					if(!is_dir($target_path)){
+						mkdir($target_path, 0755, true);
+					}
+					$target_path = $target_path . $id.'.jpg';
+					
+					
+					if(move_uploaded_file($_FILES['module_multiusergallery_file']['tmp_name'], $target_path)) {
+					    //echo "The file ".  basename( $_FILES['module_multiusergallery_file']['name']). " has been uploaded";
+					
+					
+						$gallery = $this->getGallerie($gallery_id);
+						
+						if($gallery->titleimage == 0){
+							$gallery->setValue('titleimage', $id);
+							$gallery->syncronize();
+						}
+					
+					} else{
+					    echo "There was an error uploading the file, please try again!";
+					}
+					
+				}
+			}
+
+			
+			
 			return array(
 				'head'		=> $Template->fetch('addImage.head.tpl'),
 				'content'	=> $Template->fetch('addImage.content.tpl'),
