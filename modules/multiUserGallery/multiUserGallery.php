@@ -87,7 +87,7 @@ class Module_MultiUserGallery extends Module{
 
 				$db->whereAdd('gallery_id', $gallery_id);
 				$db->whereAdd('edited > "'.$image->edited.'"');
-				$db->orderBy('edited DESC');
+				$db->orderBy('edited ASC');
 				$db->limit('0,1');
 
 				$lastImages = $db->find('jx_module_multiUserGallery_images');
@@ -121,7 +121,7 @@ class Module_MultiUserGallery extends Module{
 				$this->Assign('right_addGallery', true);
 			}
 			
-			$this->Assign('galleries', $this->getLatestGalleries());
+			$this->Assign('galleries', $this->getLatestGalleries(9));
 		
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
 		}
@@ -167,14 +167,21 @@ class Module_MultiUserGallery extends Module{
 		return $db->find('jx_module_multiUserGallery_images');
 	}
 	
-	private function getLatestGalleries($taxonomie = 0){
-		
+	private function getLatestGalleries($limit, $taxonomie = 0){
 		$db = $this->getDatabase();
 		$db->selectAdd('jx_module_multiUserGallery_galleries.*');
 		$db->selectAdd('jx_users.username');
-		$db->whereAdd('titleimage > 0');
+		
+		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
+			
+		}else{
+			$db->whereAdd('titleimage > 0');
+			$db->limit('0,'.$limit);
+		}
+
 		$db->orderBy('jx_module_multiUserGallery_galleries.edited DESC');
 		$db->joinAdd('jx_users', 'jx_users.id = jx_module_multiUserGallery_galleries.user_id');
+		
 		$result = $db->find('jx_module_multiUserGallery_galleries');
 		//echo $db->last_query;
 		return $result;

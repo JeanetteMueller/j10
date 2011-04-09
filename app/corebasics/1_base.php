@@ -19,7 +19,12 @@ class core_base{
 					return $this->loadIncludeClass($includeName);
 					
 				}else{
-					return $this->includes[$includeName];
+					$object = $this->includes[$includeName];
+					
+					if(strtolower($includeName) == 'database'){
+						$object = clone($object);
+					}
+					return $object;
 				}
 				
 				

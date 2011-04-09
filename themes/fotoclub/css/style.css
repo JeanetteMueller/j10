@@ -29,10 +29,10 @@ header .rootlink{
 }
 .slot_sidebar_left,
 .slot_sidebar_right{
-	width:250px;
+	width:220px;
 }
 .slot_content{
-	width:390px;
+	width:450px;
 	padding:0 5px;
 }
 .slot_content small{
@@ -44,10 +44,12 @@ header .rootlink{
 .slot_sidebar_left .modul,
 .slot_sidebar_right .modul{
 	float:left;
-	width:250px;
+	width:220px;
 }
 
 .slot .modul .outerHeader{
+	float:left;
+	width:100%;
 	/*background:url('../images/module.head.background.left.png') top left no-repeat;	*/
 }
 .slot .modul .outerHeader .header{
@@ -63,34 +65,33 @@ header .rootlink{
 .slot .modul .outerHeader .header a{
 	color:#aaa;
 }
-
-.slot .modul .content{
-	background:none;
-	width:238px;
+.slot .modul .outerContent{
+	float:left;
+	width:100%;
 	border-top:1px solid #ddd;
 	border-left:1px solid #ddd;
 	border-bottom:1px solid #ddd;
+}
+.slot .modul .outerContent .content{
+	background:none;
+	float:left;
 	
+
 	padding:5px;
 }
-.slot_header .modul .content{
-	width:890px;
-}
-.slot_content .modul .content{
-	width:378px;
-}
-.slot_footer .modul .content{
-	width:890px;
-}
+
 .slot .modul .footer{
 	background:url('../images/module.footer.background.png') top left repeat-x;
 	height:16px;
-	line-height:14px;
-	padding:0 5px;
 	width:100%;
+	clear:left;
 	float:left;
 	text-align:right;
 	color:#999;
+}
+.slots .modul .footer ul{
+	line-height:14px;
+	padding:0 5px;
 }
 .slot .modul .footer a{
 	color:#999;
@@ -99,9 +100,7 @@ header .rootlink{
 .slot_content a, .slot_content a:active, .slot_content a:visited, .slot_content a:hover{
 	color:#333;
 }
-.slot_content .modul .footer{
-	width:380px;
-}
+
 
 
 

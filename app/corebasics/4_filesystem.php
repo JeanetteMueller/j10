@@ -348,27 +348,5 @@ class core_filesystem extends core_parameter {
 
 		return $mime;
 	}
-	public function makedir($folder, $privileges=0755){
-		
-		$parts = explode('/', $folder);
-		
-		$folderString = '';
-		
-		foreach($parts as $folderPart){
-			if(!empty($folderPart)){
-				
-				$folderString .= $folderPart.'/';
-				if(!is_dir($folderString)){
-					
-					if(mkdir($folderString, $privileges)){
-						
-					}else{
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
 }
 

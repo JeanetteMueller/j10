@@ -5,9 +5,10 @@
 .is_multiUserGallery .griditem{
 	width:140px;
 	float:left;
-	padding:5px;
-	margin:5px;
-	border:2px solid #999;
+	padding:0px;
+	margin:0 2px 10px 2px;
+	border:1px solid #ddd;
+	text-align:center;
 }
 
 .is_multiUserGallery .content{
@@ -32,4 +33,10 @@
 .is_multiUserGallery .content a.is_gallery_showImageNext:hover{
 	background:#000;
 	opacity:0.1;
+}
+
+
+
+#overlay .is_multiUserGallery .content .imagecontainer{
+	text-align:center;
 }

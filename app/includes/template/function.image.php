@@ -52,6 +52,10 @@ function smarty_function_image($params, &$smarty){
 	$imageClass->setTitle($title);
 	
 	$imageClass->setLink($link);
+	
+	if(isset($params['fill'])){
+		$imageClass->setFill($params['fill']);
+	}
 
 	return $imageClass->getImageTag();
 	

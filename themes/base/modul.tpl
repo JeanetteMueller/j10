@@ -14,7 +14,7 @@
 	
 	<@ assign var=content value=$modul->object->loadContent() @>
 	<@ if $content !== false @>
-	<div class="content"><@ $content @></div>
+	<div class="outerContent"><div class="content"><@ $content @></div></div>
 	<@ /if @>
 	
 	

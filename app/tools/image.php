@@ -7,11 +7,16 @@ class Image {
 	private $_newBase = null;
 	private $_newWidth = 'auto';
 	private $_newHeight = 'auto';
+	private $_oldWidth = false;
+	private $_oldHeight = false;
 	private $_newAlt = false;
 	private $_newTitle = false;
 	
 	private $_newLink = false;
 	private $_newTarget = '_self';
+	
+	private $_newFill = true;
+	private $_newFillColor = '#fff';
 	
 	private $_resultFile = null;
 	
@@ -20,6 +25,10 @@ class Image {
 	}
 	public function setBase($base){
 		$this->_newBase = $base;
+		
+		if(!is_dir('files/originals/'.$this->_newBase)){
+			mkdir('files/originals/'.$this->_newBase, 0755, true);
+		}
 	}
 	public function setWidth($width){
 		$this->_newWidth = $width;
@@ -39,6 +48,12 @@ class Image {
 	public function setTarget($target){
 		$this->_newTarget = $target;
 	}
+	public function setFill($fill){
+		$this->_newFill = $fill;
+	}
+	public function setFillColor($color){
+		$this->_newFillColor = $color;
+	}
 	
 	public function getImageTag(){
 		
@@ -52,7 +67,7 @@ class Image {
 			$sufix = '</a>';
 		}
 		
-		return $prefix.'<img src="'.$this->_resultFile.'" alt="'.$this->_newAlt.'" title="'.$this->_newTitle.'" />'.$sufix;
+		return $prefix.'<img src="'.$this->_resultFile.'?rand='.rand(100,999).'" alt="'.$this->_newAlt.'" title="'.$this->_newTitle.'" border="0" />'.$sufix;
 	}
 	
 	private function convert(){
@@ -66,8 +81,16 @@ class Image {
 			
 			$this->getSizeFromFile($originalFilePath);
 			
-			$newImagePath = 'files/cache/images_resized/'.$this->_newBase.'/'.$this->_newFile.'_'.$this->_newWidth.'x'.$this->_newHeight.'.jpg';
+			$fill = 'nofill';
+			if($this->_newFill){
+				$fill = 'fill';
+			}
 			
+			$newImagePath = 'files/cache/images_resized/'.$this->_newBase.'/'.$this->_newFile.'_'.$this->_newWidth.'x'.$this->_newHeight.'_'.$fill.'.jpg';
+			
+			if(file_exists($newImagePath)){
+				unlink($newImagePath);
+			}
 			
 			if(!file_exists($newImagePath)){
 				
@@ -77,12 +100,13 @@ class Image {
 
 				}else{
 					$image = $this->createImageFromFile($originalFilePath);
+					//var_dump(array($this->_newWidth, $this->_newHeight));
 					$new_image = $this->createImage($this->_newWidth, $this->_newHeight);
 
 					$this->copyOriginalToNew($image, $new_image);
 
 					if(!is_dir('files/cache/images_resized/'.$this->_newBase)){
-						if(!mkdir('files/cache/images_resized/'.$this->_newBase, '0777')){
+						if(!mkdir('files/cache/images_resized/'.$this->_newBase, 0755, true)){
 							echo "Ordner nicht anlegbar";
 							return false;
 						}
@@ -142,25 +166,90 @@ class Image {
 			//original ausliefern
 		}
 		
+		if($this->_newFill === false){
+			//echo "fill = false";
+			$dimensions = $this->getConvertedDimensions();
+			
+			$this->_newWidth = $dimensions['width'];
+			$this->_newHeight = $dimensions['height'];
+		}
+		
 		//var_dump(array($this->_newWidth, $this->_newHeight));
+	}
+	private function getConvertedDimensions(){
+		$imgratio = ($this->_oldWidth / $this->_oldHeight);
+		
+		$distanceTop = 0;
+		$distanceLeft = 0;
+		if ($imgratio>1) {
+			$new_width = $this->_newWidth;
+			$new_height = ($this->_newWidth / $imgratio);
+			$distanceTop = ($this->_newHeight - $new_height) / 2;
+			//echo "quer";
+			
+		} elseif ($imgratio<1)  {
+			$new_height = $this->_newHeight;
+			$new_width = ($this->_newHeight * $imgratio);
+			$distanceLeft = ($this->_newWidth - $new_width) / 2;
+			//echo "hoch";
+		}else{
+			$new_width = $this->_newWidth;
+			$new_height = $this->_newHeight;
+			
+			//echo "quad";
+		}
+		
+		return array('width'=>$new_width, 'height'=>$new_height, 'top'=>$distanceTop, 'left'=>$distanceLeft);
 	}
 	private function copyOriginalToNew($original, $new){
 		
+		$dimensions = $this->getConvertedDimensions();
+		
 		ImageCopyResized(
 			$new, $original,
-			0,0,0,0,
-			$this->_newWidth, $this->_newHeight,
+			$dimensions['left'],$dimensions['top'],0,0,
+			$dimensions['width'], $dimensions['height'],
 			$this->_oldWidth, $this->_oldHeight);
 	}	
 	private function createImage($width="", $height=""){
 				
 		$dest = imageCreateTrueColor($width, $height);
 		
+		$color = $this->html2rgb($this->_newFillColor);
+		
+		$newcolor = imagecolorallocate(
+		        $dest,
+		        $color[0],
+		        $color[1],
+		        $color[2]
+		    );
+		
+		imagefill( $dest, 0, 0, $newcolor );
 		// antialising funktion zum glätten verkleinerter grafiken
 		// funktioniert aus unerfindlichen gründen nicht
 		//imageantialias($dest, TRUE);
 		
 		return $dest;
+	}
+	function html2rgb($color)
+	{
+	    if ($color[0] == '#'){
+	        $color = substr($color, 1);
+		}
+		
+	    if (strlen($color) == 6){
+	        list($r, $g, $b) = array($color[0].$color[1],
+	                                 $color[2].$color[3],
+	                                 $color[4].$color[5]);
+	    }elseif (strlen($color) == 3){
+	        list($r, $g, $b) = array($color[0].$color[0], $color[1].$color[1], $color[2].$color[2]);
+	    }else{
+	        return false;
+		}
+		
+	    $r = hexdec($r); $g = hexdec($g); $b = hexdec($b);
+
+	    return array($r, $g, $b);
 	}
 	private function createImageFromFile($file, $fileformat='jpg'){
 		//TODO: png, gif etc support einbauen
