@@ -21,7 +21,9 @@
 			<@ image file="dummy_empty" base="base" link=false width=140 height=140 alt=$gallerie->title title=false @>
 		<@ /if @></a>
 		
-		von <@ $gallerie->username @>
+		<@ if $username != $gallerie->username @>
+		von <a href="#user_id=<@ $gallerie->user_id @>" class="is_gallery_showUser" id="is_gallery_showUser__<@ $gallerie->user_id @>"><@ $gallerie->username @></a>
+		<@ /if @>
 	</div>
 <@ /foreach @>
 
@@ -42,8 +44,6 @@
 		<a href="#gallery_id=<@ $image->gallery_id @>&image_id=<@ $image->id @>" class="is_gallery_showImage without_u" id="is_gallery_showImage__<@ $image->id @>">
 		<@ image file=$image->id base="multiUserGallery" link=false width=140 height=140 alt=$image->title @>
 		</a>
-		
-		von <@ $image->username @>
 	</div>
 <@ /foreach @>
 

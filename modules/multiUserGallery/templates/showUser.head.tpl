@@ -1,0 +1,1 @@
+<a href="#" class="is_homeButton">Galerie</a> &rArr; <@ $username @>

@@ -66,7 +66,6 @@ jx = {
 			
 			target.config[name] = value;
 		}
-
 	},
 };
 jx.ns = jx.namespace;

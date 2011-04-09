@@ -10,6 +10,7 @@ jx.modules.multiUserGallery = {
 		ref.each(function(){
 			$('.is_gallery_showGallery', this).unbind('click.showGallery').bind('click.showGallery', self.showGallery);
 			$('.is_gallery_showImage', this).unbind('click.is_gallerie_showImage').bind('click.is_gallerie_showImage', self.showImage);
+			$('.is_gallery_showUser', this).unbind('click.showUser').bind('click.showUser', self.showUser);
 			
 			$('.is_gallery_addGalleryButton', this).unbind('click.is_gallery_addGalleryButton').bind('click.is_gallery_addGalleryButton', self.showAddGalleryForm);
 			$('.is_gallery_addImageButton', this).unbind('click.is_gallery_addImageButton').bind('click.is_gallery_addImageButton', self.showAddImageForm);
@@ -24,16 +25,29 @@ jx.modules.multiUserGallery = {
 		if( ! this.load ){
 
 			if(this.config.gallery_id > 0){
-				this.loadGallery(this.config.gallery_id, ref);
+				this.loadGallery({gallery_id: this.config.gallery_id}, ref);
 			}
 			
 			if(this.config.image_id > 0){
 				this.showImage();
 			}
 			
+			if(this.config.user_id > 0){
+				this.loadGalleryByUser({user_id: this.config.user_id}, ref);
+			}
+			
 			this.load = true;
 		}
 		
+	},
+	showUser : function (){
+		var user_id = $(this).attr('id').split('__').pop();
+		
+		var self = $(this);
+		
+		var target = self.parentsUntil('.modul');
+		
+		jx.modules.multiUserGallery.loadGalleryByUser({user_id: user_id}, target);
 	},
 	showImage : function(){
 		var image_id = false;
@@ -47,7 +61,6 @@ jx.modules.multiUserGallery = {
 		
 		jx.overlay.init('multiUserGallery/showImage?params[gallery_id]='+gallery_id+'&params[image_id]='+image_id);
 	},
-
 	showGalleryHome : function(){
 		var self = $(this);
 		var root = self.parentsUntil('.modul');
@@ -79,16 +92,14 @@ jx.modules.multiUserGallery = {
 		
 		var target = self.parentsUntil('.modul');
 		
-		jx.modules.multiUserGallery.loadGallery(gallery_id, target);
+		jx.modules.multiUserGallery.loadGallery({gallery_id: gallery_id}, target);
 	}, 
-	loadGallery : function(gallery_id, target){
-		
-		
+	loadGalleryViaAjax : function (type, params, target){
 		target.children('div.content').html(''+jx.loading);
-			
+		
 		jQuery.ajax({ 	
-			url: 		jx.root+"ajax/multiUserGallery/showGallery",
-			data: 		{params: {gallery_id: gallery_id }}, 
+			url: 		jx.root+"ajax/multiUserGallery/"+type,
+			data: 		{params: params}, 
 		 	dataType: 	'json',
 			type: 		"POST",
 			context: 	document.body, 
@@ -104,7 +115,15 @@ jx.modules.multiUserGallery = {
 				}
 			}
 		});
+	},
+	loadGalleryByUser : function (params, target){
 		
+		jx.modules.multiUserGallery.loadGalleryViaAjax('showGalleryByUser', params, target);
+	},
+	loadGallery : function(params, target){
+		
+		jx.modules.multiUserGallery.loadGalleryViaAjax('showGallery', params, target);
+				
 	},
 	showAddGalleryForm : function(){
 		
