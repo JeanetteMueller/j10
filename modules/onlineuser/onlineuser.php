@@ -7,7 +7,16 @@ class Module_Onlineuser extends Module{
 	public function autoRefresh(){
 		return true;
 	}
-	
+	public function setup($params){
+		
+		$this->params = array('itemcount'=>$this->_itemcount);
+		
+		if(is_array($this->params) && isset($this->params['itemcount'])){
+			$this->params['itemcount'] = $this->params['itemcount'];
+		}
+		
+		
+	}
 	public function getHeader(){
 		$result = $this->getUser()->getUserCountListedAsLoggedIn();
 
@@ -26,13 +35,7 @@ class Module_Onlineuser extends Module{
 			}
 		}
 		
-		if(is_array($this->params) && isset($this->params['itemcount'])){
-			$itemcount = $this->params['itemcount'];
-		}else{
-			$itemcount = $this->_itemcount;
-		}
-		
-		$result = $this->getUser()->getUsersListedAsLoggedIn($itemcount);
+		$result = $this->getUser()->getUsersListedAsLoggedIn($this->params['itemcount']);
 		
 		$users = $result['list'];
 		$count = $result['count'];

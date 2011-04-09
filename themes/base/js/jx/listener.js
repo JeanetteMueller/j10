@@ -80,4 +80,6 @@ jx.Listeners = {
 };
 
 // Register ready handler
-jQuery(document).ready(jx.Listeners.init);
+jQuery(document).ready(
+	jx.Listeners.init
+);

@@ -2,6 +2,11 @@
 
 class Module_MultiUserGallery extends Module{
 	
+	public function setup($params){
+		parent::setup($params);
+		
+		$this->Assign('user_id', $this->getSession('user_id'));
+	}
 	public function ajax_showGallery(){
 		
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'showGallery')){
@@ -28,7 +33,7 @@ class Module_MultiUserGallery extends Module{
 			}
 			
 			
-
+			$Template->Assign('user_id', $this->getSession('user_id'));
 			
 		
 			return array(
@@ -54,7 +59,15 @@ class Module_MultiUserGallery extends Module{
 				$galleries = $this->getLatestGalleries(false, $user_id);
 				$Template->Assign('galleries', $galleries);
 				$Template->Assign('username', $galleries[0]->username);
+				
+				
+				if($this->getSession('user_id') == $user_id && $this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
+					$Template->Assign('right_addGallery', true);
+				}
 			}
+			
+			$Template->Assign('user_id', $this->getSession('user_id'));
+			
 			return array(
 				'header'	=> $Template->fetch('showUser.head.tpl'),
 				'content'	=> $Template->fetch('content.tpl'),
@@ -68,6 +81,38 @@ class Module_MultiUserGallery extends Module{
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
 			$Template = $this->getMyTemplate();
 		
+			return array(
+				'head'		=> $Template->fetch('addGallery.head.tpl'),
+				'content'	=> $Template->fetch('addGallery.content.tpl'),
+				'footer'	=> $Template->fetch('addGallery.footer.tpl')
+			);
+		}
+		return false;
+	}
+	public function overlay_addGallery(){
+		
+		
+		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
+			$Template = $this->getMyTemplate();
+			$Template->Assign('addGallery', false);
+			$params = $this->getPost('params');
+		
+			if($params['module_multiusergallery_action'] == 'addGallery'){
+			
+				$db = $this->getDatabase();
+				
+				$db->insertValue('created', 'NOW()');
+				$db->insertValue('user_id', $this->getSession('user_id'));
+				$db->insertValue('title', $params['module_multiusergallery_title']);
+				$db->insertValue('description', $params['module_multiusergallery_description']);
+			
+			}
+
+			if($db->insert('jx_module_multiUserGallery_galleries')){
+				
+				$Template->Assign('addGallery', true);
+			}
+			
 			return array(
 				'head'		=> $Template->fetch('addGallery.head.tpl'),
 				'content'	=> $Template->fetch('addGallery.content.tpl'),
@@ -94,7 +139,7 @@ class Module_MultiUserGallery extends Module{
 			
 			$Template = $this->getMyTemplate();
 		
-			$params = $this->getget('params');
+			$params = $this->getPost('params');
 		
 			$gallery_id = $params['gallery_id'];
 			$image_id = $params['image_id'];
@@ -158,6 +203,7 @@ class Module_MultiUserGallery extends Module{
 			$this->Assign('galleries', $this->getLatestGalleries(9));
 		
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
+			
 		}
 	}
 	public function getFooter(){
@@ -209,18 +255,24 @@ class Module_MultiUserGallery extends Module{
 		$db->selectAdd('jx_module_multiUserGallery_galleries.*');
 		$db->selectAdd('jx_users.username');
 		
-		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
+		if($user_id !== false && $user_id !== $this->getSession('user_id')){
+			$db->whereAdd('user_id', $user_id);
+			$db->whereAdd('titleimage', '0', '>');
+		}elseif($user_id !== false &&  $user_id == $this->getSession('user_id') ){
+			$db->whereAdd('user_id', $user_id);
 			
 		}else{
-			$db->whereAdd('titleimage > 0');
-			if($limit !== false){
-				$db->limit('0,'.$limit);
-			}
+			$db->whereAdd('user_id', $this->getSession('user_id'));
+			$db->whereAdd('titleimage', '0', '>', 'OR');
 		}
 		
-		if($user_id !== false){
-			$db->whereAdd('jx_users.id', $user_id);
+		//$db->whereAdd('titleimage', '0', '>', 'OR');
+		
+		if($limit !== false){
+			$db->limit('0,'.$limit);
 		}
+		
+		
 		
 		$db->orderBy('jx_module_multiUserGallery_galleries.edited DESC');
 		$db->joinAdd('jx_users', 'jx_users.id = jx_module_multiUserGallery_galleries.user_id');

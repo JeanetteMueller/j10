@@ -2,7 +2,7 @@ jx.overlay = {
 	
 	overlay : '<div id="overlayBackground"></div><div id="overlay"><a id="overlay_closeButton" href="javaScript:;">Close</a></div>',
 	
-	init : function(modul, callback){
+	init : function(modul, params, callback){
 		if(jQuery('#overlay').length == 0){
 			jQuery('body').append(this.overlay);
 		}
@@ -12,14 +12,21 @@ jx.overlay = {
 		
 		jQuery(document).keyup(function(e) { 
 		    if (e.which == 27) {
-				jx.overlay.remove();
+				jx.overlay.hide();
 			}
 		});
 		
-		if(typeof modul != 'undefined'){
-			jx.overlay.loadModuleContent(modul, callback);
+		if(typeof params == 'undefined'){
+			params = {};
 		}
 		
+		if(typeof modul != 'undefined'){
+			jx.overlay.loadModuleContent(modul, params, callback);
+		}
+		
+	},
+	hide : function(){
+		$('#overlay_closeButton').click();
 	},
 	initWithData : function(data){
 		if(jQuery('#overlay').length == 0){
@@ -83,17 +90,13 @@ jx.overlay = {
 		
 		jx.Listeners.init(source);
 	},
-	loadModuleContent : function(modul, callback){
-		
-		var config = {};
-		
-		jx.parseParameter(config);
-		
+	loadModuleContent : function(modul, params, callback){
+				
 		jQuery.ajax({ 	
 			url: 		jx.root+"overlay/"+modul,
-			//data: 		{params: config.config}, 
+			data: 		{params: params}, 
 		 	dataType: 	'html',
-			type: 		"GET",
+			type: 		"POST",
 			context: 	document.body, 
 			success: 	function(result){
 				
@@ -105,11 +108,12 @@ jx.overlay = {
 				
 				jQuery('#overlay').children('.modul').remove().end().append(result);
 				
-				console.log('callback start');
+				
 				if(typeof callback !== 'undefined'){
+					console.log('callback start');
 					callback();
+					console.log('callback end');
 				}
-				console.log('callback end');
 				
 				jx.overlay.setBindings();
 				

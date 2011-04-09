@@ -52,19 +52,25 @@ jx = {
 	
 	
 	parseParameter : function(target){
-		var paramString = location.href.split('#').pop();
-		var params = paramString.split('&');
 		
-		target.config = {};
-		for(var i=0; i < params.length; i++){
-			var param = params[i];
+		var parts = location.href.split('#');
+		if(parts.length > 1){
+		
+			var paramString = location.href.split('#').pop();
+			var params = paramString.split('&');
+		
+			target.config = {};
+			for(var i=0; i < params.length; i++){
+				var param = params[i];
 			
-			var parts = param.split('=');
+				var parts = param.split('=');
 			
-			var name = parts.shift();
-			var value = parts.pop();
+				var name = parts.shift();
+				var value = parts.pop();
 			
-			target.config[name] = value;
+				target.config[name] = value;
+			}
+			console.log(['parseParameter', target.config]);
 		}
 	},
 };
@@ -86,5 +92,30 @@ $.fn.parentsUntil = function(selector){
     return target;
 };
 
+Function.prototype.forEach = function(object, block, context) {
+  for (var key in object) {
+    if (typeof this.prototype[key] == "undefined") {
+      block.call(context, object[key], key, object);
+    }
+  }
+};
 
+// globally resolve forEach enumeration
+var forEach = function(object, block, context) {
+  if (object) {
+    var resolve = Object; // default
+    if (object instanceof Function) {
+      // functions have a "length" property
+      resolve = Function;
+    } else if (object.forEach instanceof Function) {
+      // the object implements a custom forEach method so use that
+      object.forEach(block, context);
+      return;
+    } else if (typeof object.length == "number") {
+      // the object is array-like
+      resolve = Array;
+    }
+    resolve.forEach(object, block, context);
+  }
+};
 

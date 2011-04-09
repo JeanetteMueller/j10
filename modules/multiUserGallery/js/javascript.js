@@ -2,6 +2,11 @@
 jx.modules.multiUserGallery = {
 	
 	load : false,
+	config : {
+		gallery_id: 0,
+		image_id: 0,
+		user_id:0
+	},
 	
 	init : function(ref){
 		var self = this;
@@ -17,28 +22,51 @@ jx.modules.multiUserGallery = {
 			
 			$('.is_homeButton', this).unbind('click.is_homeButton').bind('click.is_homeButton', self.showGalleryHome);
 			
-			$('.is_gallery_imageLast', this).unbind('click.is_gallery_imageLast').bind('click.is_gallery_imageLast', self.showImageLast);
-			$('.is_gallery_imageNext', this).unbind('click.is_gallery_imageNext').bind('click.is_gallery_imageNext', self.showImageNext);
+			// $('.is_gallery_imageLast', this).unbind('click.is_gallery_imageLast').bind('click.is_gallery_imageLast', self.showImageLast);
+			// $('.is_gallery_imageNext', this).unbind('click.is_gallery_imageNext').bind('click.is_gallery_imageNext', self.showImageNext);
+			
+			$('#overlay_closeButton').unbind('click.overlay_closeButton_multiUserGallery').bind('click.overlay_closeButton_multiUserGallery', self.overlay_closeButton);
 		});
 		
 		
-		if( ! this.load ){
+		if( ! self.load ){
 
-			if(this.config.gallery_id > 0){
-				this.loadGallery({gallery_id: this.config.gallery_id}, ref);
+			if(self.config.gallery_id > 0){
+				self.loadGallery({gallery_id: self.config.gallery_id}, ref);
 			}
 			
-			if(this.config.image_id > 0){
-				this.showImage();
+			if(self.config.image_id > 0){
+				self.showImage();
 			}
 			
-			if(this.config.user_id > 0){
-				this.loadGalleryByUser({user_id: this.config.user_id}, ref);
+			if(self.config.user_id > 0){
+				self.loadGalleryByUser({user_id: self.config.user_id}, ref);
 			}
 			
-			this.load = true;
+			self.load = true;
 		}
 		
+	},
+	overlay_closeButton : function(){
+		jx.parseParameter(jx.modules.multiUserGallery);
+		
+		var self = jx.modules.multiUserGallery;
+		if(self.config.addGallery == "1"){
+			if(parseInt(self.config.user_id, 10) > 0){
+				self.loadGalleryByUser({user_id: self.config.user_id}, $('.is_multiUserGallery:last'));
+			}
+		}
+		
+		
+		var url = '#';
+		forEach(jx.modules.multiUserGallery.config, function(object, key){
+			if(key !== 'image_id' && key !== 'addGallery'){
+				url += key+"="+object+"&";
+			}
+		});
+		//remove the last "&"
+		url = url.substr(0, url.length-1);
+		document.location.href = url;
 	},
 	showUser : function (){
 		var user_id = $(this).attr('id').split('__').pop();
@@ -59,7 +87,7 @@ jx.modules.multiUserGallery = {
 			image_id = $(this).attr('id').split('__').pop();
 		}
 		
-		jx.overlay.init('multiUserGallery/showImage?params[gallery_id]='+gallery_id+'&params[image_id]='+image_id);
+		jx.overlay.init('multiUserGallery/showImage', {gallery_id: gallery_id, image_id: image_id});
 	},
 	showGalleryHome : function(){
 		var self = $(this);

@@ -1,8 +1,5 @@
 
-$(document).ready(function() {
 
-	jx.autoRefresh.init();
-});
 
 
 
@@ -90,3 +87,8 @@ jx.autoRefresh = {
 		}
 	}
 }
+
+jQuery(document).ready(
+
+	jx.autoRefresh.init
+);
