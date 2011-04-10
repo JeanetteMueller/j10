@@ -8,17 +8,18 @@
 		}, 2000);
 		
 	</script>
+
 <@ else @>
 <form method="post" action="addGallery" >
 	<fieldset>
 			
 		<div>
 			<label for="module_multiusergallery_title">Titel:</label>
-			<input type="text" name="module_multiusergallery_title" value="<@ $titel @>" />
+			<input type="text" name="module_multiusergallery_title" value="" />
 		</div>
 		<div>
 			<label for="module_multiusergallery_description">Beschreibung:</label>
-			<textarea name="module_multiusergallery_description"><@ $description @></textarea>
+			<textarea name="module_multiusergallery_description"></textarea>
 		</div>
 		
 		<div>

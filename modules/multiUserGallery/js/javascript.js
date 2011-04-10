@@ -20,6 +20,8 @@ jx.modules.multiUserGallery = {
 			$('.is_gallery_addGalleryButton', this).unbind('click.is_gallery_addGalleryButton').bind('click.is_gallery_addGalleryButton', self.showAddGalleryForm);
 			$('.is_gallery_addImageButton', this).unbind('click.is_gallery_addImageButton').bind('click.is_gallery_addImageButton', self.showAddImageForm);
 			
+			$('.is_gallery_editGalleryButton', this).unbind('click.is_gallery_editGalleryButton').bind('click.is_gallery_editGalleryButton', self.showEditGalleryForm);
+			
 			$('.is_homeButton', this).unbind('click.is_homeButton').bind('click.is_homeButton', self.showGalleryHome);
 			
 			// $('.is_gallery_imageLast', this).unbind('click.is_gallery_imageLast').bind('click.is_gallery_imageLast', self.showImageLast);
@@ -55,12 +57,18 @@ jx.modules.multiUserGallery = {
 			if(parseInt(self.config.user_id, 10) > 0){
 				self.loadGalleryByUser({user_id: self.config.user_id}, $('.is_multiUserGallery:last'));
 			}
+		}		
+		if(self.config.editGallery == "1" || self.config.addImage == "1"){
+			if(parseInt(self.config.gallery_id, 10) > 0){
+				self.loadGallery({gallery_id: self.config.gallery_id}, $('.is_multiUserGallery:last'));
+			}
 		}
+
 		
 		
 		var url = '#';
 		forEach(jx.modules.multiUserGallery.config, function(object, key){
-			if(key !== 'image_id' && key !== 'addGallery'){
+			if(key !== 'image_id' && key !== 'addGallery' && key !== 'editGallery' && key !== 'addImage'){
 				url += key+"="+object+"&";
 			}
 		});
@@ -93,7 +101,7 @@ jx.modules.multiUserGallery = {
 		var self = $(this);
 		var root = self.parentsUntil('.modul');
 		
-		root.children('div.content').html(''+jx.loading);
+		root.find('div.content').html(''+jx.loading);
 		
 		jQuery.ajax({ 	
 			url: 		jx.root+"module/multiUserGallery",
@@ -123,7 +131,7 @@ jx.modules.multiUserGallery = {
 		jx.modules.multiUserGallery.loadGallery({gallery_id: gallery_id}, target);
 	}, 
 	loadGalleryViaAjax : function (type, params, target){
-		target.children('div.content').html(''+jx.loading);
+		target.find('div.content').html(''+jx.loading);
 		
 		jQuery.ajax({ 	
 			url: 		jx.root+"ajax/multiUserGallery/"+type,
@@ -145,22 +153,20 @@ jx.modules.multiUserGallery = {
 		});
 	},
 	loadGalleryByUser : function (params, target){
-		
 		jx.modules.multiUserGallery.loadGalleryViaAjax('showGalleryByUser', params, target);
 	},
 	loadGallery : function(params, target){
-		
-		jx.modules.multiUserGallery.loadGalleryViaAjax('showGallery', params, target);
-				
+		jx.modules.multiUserGallery.loadGalleryViaAjax('showGallery', params, target);	
+	},
+	showEditGalleryForm : function(){
+		var gallery_id = $(this).attr('id').split('__').pop();
+		jx.overlay.init('multiUserGallery/showEditGallery', {gallery_id:gallery_id});
 	},
 	showAddGalleryForm : function(){
-		
 		jx.overlay.init('multiUserGallery/showAddGallery');
 	},
 	showAddImageForm : function(){
 		var gallery_id = $(this).attr('id').split('__').pop();
-		
-		console.debug(gallery_id);
 		jx.overlay.init('multiUserGallery/showAddImage', {gallery_id:gallery_id});
 	}
 }

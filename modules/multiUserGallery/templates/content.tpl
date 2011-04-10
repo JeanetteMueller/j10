@@ -26,7 +26,7 @@
 		<@ /if @>
 	</div>
 <@ /foreach @>
-
+</div>
 <@ else @>
 
 <@* ---------------- *@>
@@ -34,7 +34,11 @@
 
 
 <@ if $images @>
-
+<div class="intro">
+	<h2><@ $gallery->title|@utf8_encode @></h2>
+	<p><@ $gallery->description|@utf8_encode @></p>
+	<p class="autor">Autor: <a href="#user_id=<@ $gallery->user_id @>" class="is_gallery_showUser" id="is_gallery_showUser__<@ $gallery->user_id @>"><@ $gallery->username @></a></p>
+</div>
 <div class="grid">
 <@ foreach from=$images item=image key=key @>
 	<div class="griditem">
@@ -46,7 +50,7 @@
 		</a>
 	</div>
 <@ /foreach @>
-
+</div>
 <@ else @>
 	Keine Bilder vorhanden
 <@ /if @>
@@ -54,4 +58,3 @@
 
 <@ /if @>
 
-</div>
