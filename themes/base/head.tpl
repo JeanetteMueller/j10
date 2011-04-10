@@ -33,15 +33,17 @@ maximum-scale = 1.0 retains dimensions instead of zooming in if page width < dev
 
 
 <!-- CSS : implied media="all" -->
-<link rel="stylesheet" media="all" href="<@ $TEMPLATE_DIR_BASE @>css/style.css?v=1">
-<link rel="stylesheet" media="all" href="<@ $TEMPLATE_DIR @>css/style.css?v=1">
+<link rel="stylesheet" media="all" href="<@ $TEMPLATE_DIR_BASE @>css/style.css?v=1" />
+<link rel="stylesheet" media="all" href="<@ $TEMPLATE_DIR @>css/style.css?v=1" />
 
 <!-- For the less-enabled mobile browsers like Opera Mini -->
-<link rel="stylesheet" media="handheld" href="<@ $TEMPLATE_DIR_BASE @>css/handheld.css?v=1">
+<link rel="stylesheet" media="handheld" href="<@ $TEMPLATE_DIR_BASE @>css/handheld.css?v=1" />
 
 
 <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
 <script src="<@ $EXTERNALS_DIR @>modernizr-1.5/modernizr-1.5.min.js"></script>
+<@*<link rel="stylesheet" media="all" href="<@ $EXTERNALS_DIR @>valums-file-uploader-0c701eb/client/fileuploader.css" />*@>
+<script type="text/javascript" src="<@ $EXTERNALS_DIR @>valums-file-uploader-0c701eb/client/fileuploader.js"></script>
 
 <!-- load the JS of the modules -->
 <@ foreach from=$moduleIncludes.css item=pfad @>

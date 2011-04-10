@@ -48,18 +48,24 @@ class dataobject {
 
 				$updateSql.= ' WHERE ID = "'.$this->id.'"; ';
 
-				$this->_core->update($updateSql);
+				if($this->_core->update($updateSql)){
+					$this->edited = $edittime;
+					return true;
+				}
 				
-				$this->edited = $edittime;
+				
 			}else{
 				//Insert
 				foreach($this as $key=>$value){
 					$this->_core->set($key, $value);
 				}
-				$this->id = $this->_core->insert($this->_table);
+				if($this->id = $this->_core->insert($this->_table)){
+					return true;
+				}
 			}
 			
 		}
+		return false;
 	}
 	public function resetChanges(){
 		$this->_changed = array();

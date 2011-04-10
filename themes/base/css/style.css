@@ -432,7 +432,7 @@ body{
 form fieldset .info{
 	font-size:80%;
 	float:left;
-	width:50%;
+	width:54%;
 	padding: 5px 0 0 45%;
 }
 form fieldset legend{
@@ -459,6 +459,14 @@ form fieldset div input, form fieldset div select, form fieldset div textarea{
 	margin:0;
 	float:left;
 	width:50%;
+	
+}
+form fieldset div input[type="text"], form fieldset div input[type="password"], form fieldset div textarea{
+	padding:1%;
+	margin:0;
+	float:left;
+	width:52%;
+	border: 1px solid #999;
 }
 form fieldset div select{
 	width: auto;

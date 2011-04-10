@@ -8,7 +8,7 @@ jx.overlay = {
 		}
 		jx.overlay.setBindings();
 		
-		jQuery('#overlay').children('.modul').remove().end().append('<div class="modul"><div class="outerHeader"><div class="header">Loading</div></div><div class="content">' + jx.loading + '</div></div>');
+		jQuery('#overlay').children('.modul').remove().end().append('<div class="modul"><div class="outerHeader"><div class="header">Loading</div></div><div class="outerContent"><div class="content">' + jx.loading + '</div></div></div>');
 		
 		jQuery(document).keyup(function(e) { 
 		    if (e.which == 27) {
