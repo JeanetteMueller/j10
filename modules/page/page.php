@@ -3,9 +3,14 @@
 class Module_Page extends Module{	
 	
 	private $_content = null;
+	private $_contentid = 1;
 	
 	public function setup($params){
 		parent::setup($params);
+		
+		if(!isset($this->params['contentid'])){
+			$this->params['contentid'] = $this->_contentid;
+		}
 		
 		if(is_array($this->params) && isset($this->params['contentid'])){
 			$db = $this->getDatabase();
@@ -37,5 +42,35 @@ class Module_Page extends Module{
 	}
 	public function getFooter(){
 		return true;
+	}
+	public function getOptionKeys(){
+		return array('contentid');
+	}
+	public function getTitleForOption($key){
+		switch($key){
+			case 'contentid':
+				return 'Beitrag';
+			break;
+		}
+		return $key;
+	}
+	public function getOptionsFor($key){
+		switch($key){
+			case 'contentid':
+			
+				$db = $this->getDatabase();
+				$contents = $db->find('jx_content');
+				
+				$result = array();
+				
+				foreach($contents as $item){
+					$result[$item->id] = utf8_encode($item->ueberschrift);
+				}
+				
+				return $result;
+			break;
+		}
+		
+		return array();
 	}
 }

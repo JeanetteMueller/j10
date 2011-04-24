@@ -4,3 +4,4 @@
 	<@ /foreach @>
 </ul>
 
+(Maximale Anzeige <@ $maxCount @>)

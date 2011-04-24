@@ -1,6 +1,60 @@
 
 
 jx.modules.admin_reorderModules = {
+	initUpdateParams : function(ref){
+		var self = this;
+		
+		ref.each(function(){
+
+			$(this).unbind('change.updateParams').bind('change.updateParams', function(){
+				
+
+				
+				var target = $(this).parentsUntil('.modul');
+				var id = target.attr('id').split('_').pop();
+				
+				var data = {modulslot_id: id, newParams: {} };
+				var key = '';
+				$(this).parentsUntil('.admin').find('input, textarea, select').each(function(index, object){
+					
+					key = $(object).attr('id').split('__').pop();
+					
+					data.newParams[key] = $(object).val();
+				});
+				
+				
+				jQuery.ajax({ 	
+					url: 		jx.root+"ajax/admin_reorderModules/updateModulParams",
+				 	dataType: 	'json',
+					data:  		{params: data},
+					type: 		"POST",
+					context: 	document.body, 
+					success: 	function(json){
+						
+						if(json == "true" ){
+							
+							var modulid = $(target).attr('id');
+							var string = modulid.split('__').pop();
+							var id = string.split('_').pop();
+							var name = string.split('_').shift();
+							
+							var request = [];
+							request.push({id:id, name:name, params:data.newParams});
+													
+							window[modulid+'_params'] = data.newParams;
+							
+							//modul__<@ $modul->path @>_<@ $modul->id @>_params
+							
+							jx.autoRefresh.autoRefresh(request);
+							
+						}
+					}
+				});
+				
+			});
+		});
+		
+	},
 	initReorder : function(ref){
 		
 		$( '.slot' ).sortable({
@@ -88,10 +142,6 @@ jx.modules.admin_reorderModules = {
 					site_id = 'NULL';
 				}
 				var params = 'NULL';
-				var newParams = window.prompt('Parametereingabe falls benötigt');
-				if(newParams !== '' && newParams !== null && newParams !== 'NULL'){
-					params = newParams;
-				}
 				
 				var data = {
 					modul: modul,
@@ -127,7 +177,7 @@ jx.modules.admin_reorderModules = {
 			$(this).unbind('click.removemodul').bind('click.removemodul', function(){
 				
 				var target = $(this).parentsUntil('.modul');
-				var id = $(this).parentsUntil('.modul').attr('id').split('_').pop();
+				var id = target.attr('id').split('_').pop();
 				
 				var data = {modulslot_id: id};
 				
@@ -156,3 +206,4 @@ jx.Listeners.addListener('is_admin_reorderModules', jx.modules.admin_reorderModu
 jx.Listeners.addListener('is_modulselector', function(ref){jx.modules.admin_reorderModules.initInsert(ref);}, 1);
 
 jx.Listeners.addListener('is_removeModule', function(ref){jx.modules.admin_reorderModules.initRemove(ref);}, 1);
+jx.Listeners.addListener('is_updateModulParams', function(ref){jx.modules.admin_reorderModules.initUpdateParams(ref);}, 1);

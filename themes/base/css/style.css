@@ -392,6 +392,7 @@ body{
 	background:#fff;
 	float:left;
 	width:100%;
+	position:relative;
 }
 .slot .modul > div{
 	float:left;
@@ -419,14 +420,51 @@ body{
 }
 
 .slot .modul .admin{
-	border:1px solid #f00;
-	float:left;
-	width:100%;
-	background:#fff6f6;
+	
+
+
+	position:absolute;
+	left:10px;
+	top:10px;
 }
 .slot .modul .admin a{
 	color:#000;
 }
+.slot .modul .admin ul{
+	padding: 0 10px 0 25px;
+	margin:0;
+}
+.slot .modul .admin .admin_optionstable{
+
+}
+.slot .modul .admin .admin_optionstable tr td{
+	text-align:left;
+	padding:10px;
+}
+
+.slot .modul .admin fieldset {
+	border:1px solid #f00;
+	padding:25px 0 0 0;
+	margin:10px;
+	background:#fff6f6;
+	box-shadow: 0 0 15px #333;
+	-moz-box-shadow: 0 0 15px #333;
+	-webkit-box-shadow:  0 0 15px #333;
+}
+
+.slot .modul .admin fieldset legend{
+	position:absolute;
+	top:10px;
+	left:10px;
+	font-weight:bold;
+	padding: 0 3px;
+	margin: 0;
+	border:1px solid #f00;
+	background:#fff6f6;
+	color:#f00;
+}
+
+
 
 
 form fieldset .info{

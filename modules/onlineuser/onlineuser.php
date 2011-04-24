@@ -8,11 +8,11 @@ class Module_Onlineuser extends Module{
 		return true;
 	}
 	public function setup($params){
+		parent::setup($params);
 		
-		$this->params = array('itemcount'=>$this->_itemcount);
 		
-		if(is_array($this->params) && isset($this->params['itemcount'])){
-			$this->params['itemcount'] = $this->params['itemcount'];
+		if(!isset($this->params['itemcount'])){
+			$this->params['itemcount'] = $this->_itemcount;
 		}
 		
 		
@@ -34,7 +34,6 @@ class Module_Onlineuser extends Module{
 				$this->getUser()->addUserToListedLoggedInUsers($user->id, $user->username);
 			}
 		}
-		
 		$result = $this->getUser()->getUsersListedAsLoggedIn($this->params['itemcount']);
 		
 		$users = $result['list'];
@@ -58,8 +57,31 @@ class Module_Onlineuser extends Module{
 		}
 		
 		$this->assign('list', $list);
+		
+		$this->assign('maxCount', $this->params['itemcount']);
 	}
 	public function getFooter(){
 		return true;
+	}
+	public function getOptionKeys(){
+		return array('itemcount');
+	}
+	public function getTitleForOption($key){
+		switch($key){
+			case 'itemcount':
+				return 'Anzahl der User';
+			break;
+		}
+		return $key;
+	}
+	public function getOptionsFor($key){
+		switch($key){
+			case 'itemcount':
+			
+				return $this->getConverter()->getNumberArray(1,25);
+			break;
+		}
+		
+		return array();
 	}
 }

@@ -46,6 +46,33 @@ class Module_Admin_reorderModules extends Module{
 		
 		return true;
 	}
+	public function ajax_updateModulParams(){
+		$params  = $this->getPost('params');
+		
+		if(isset($params['newParams']) && !empty($params['newParams'])){
+			
+			$id = $params['modulslot_id'];
+			$newParams = $params['newParams'];
+		
+			$db = $this->getDatabase();
+		
+			$db->whereAdd('id', $params['modulslot_id']);
+			$results = $db->find('jx_modul_to_slots_in_site');
+		
+			if(count($results) > 0){
+				$eintrag = reset($results);
+			
+				$eintrag->setValue('params', json_encode($params['newParams']));
+
+				$eintrag->syncronize();
+			
+				return json_encode(true);
+			}
+		}
+		
+		return json_encode(false);
+		
+	}
 	public function ajax_insertNewModuleInPlace(){
 		
 		$params  = $this->getPost('params');
