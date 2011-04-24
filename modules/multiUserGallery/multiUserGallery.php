@@ -2,12 +2,19 @@
 
 class Module_MultiUserGallery extends Module{
 	
+	private $_latestGalleriesCount = 9;
+	
 	public function setup($params){
 		parent::setup($params);
 		
+		
+		if(!isset($this->params['latestGalleriesCount'])){
+			$this->params['latestGalleriesCount'] = $this->_latestGalleriesCount;
+		}
+		
 		$this->Assign('user_id', $this->getSession('user_id'));
 		
-		$this->form_AddImage();
+		//$this->form_AddImage();
 	}
 	public function ajax_showGallery(){
 		
@@ -144,7 +151,6 @@ class Module_MultiUserGallery extends Module{
 	}
 	public function overlay_addGallery(){
 		
-		
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
 			$Template = $this->getMyTemplate();
 			$Template->Assign('addGallery', false);
@@ -280,7 +286,6 @@ class Module_MultiUserGallery extends Module{
 		die();
 		
 	}
-	
 	public function overlay_showImage(){
 		
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'showImage')){
@@ -342,15 +347,16 @@ class Module_MultiUserGallery extends Module{
 	public function getContent(){
 		
 		// echo $this->id.' - ';
-		// echo $this->name;
-		
+		// echo $this->name.' - ';
+		// echo $this->modul_id.' - ';
+
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'showGallery')){
-			
+
 			if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'addGallery')){
 				$this->Assign('right_addGallery', true);
 			}
 			
-			$this->Assign('galleries', $this->getLatestGalleries(9));
+			$this->Assign('galleries', $this->getLatestGalleries($this->params['latestGalleriesCount']));
 		
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
 			
@@ -400,7 +406,6 @@ class Module_MultiUserGallery extends Module{
 		$db->orderBy('id DESC');
 		return $db->find('jx_module_multiUserGallery_images');
 	}
-	
 	private function getLatestGalleries($limit, $user_id=false, $taxonomie = 0){
 		$db = $this->getDatabase();
 		$db->selectAdd('jx_module_multiUserGallery_galleries.*');
@@ -432,5 +437,28 @@ class Module_MultiUserGallery extends Module{
 		$result = $db->find('jx_module_multiUserGallery_galleries');
 		//echo $db->last_query;
 		return $result;
+	}
+	
+	
+	public function getOptionKeys(){
+		return array('latestGalleriesCount');
+	}
+	public function getTitleForOption($key){
+		switch($key){
+			case 'latestGalleriesCount':
+				return 'Anzahl der Galerien';
+			break;
+		}
+		return $key;
+	}
+	public function getOptionsFor($key){
+		switch($key){
+			case 'latestGalleriesCount':
+			
+				return $this->getConverter()->getNumberArray(3,20);
+			break;
+		}
+		
+		return array();
 	}
 }

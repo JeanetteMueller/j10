@@ -39,7 +39,7 @@ class Modules extends Includes{
 		
 		if ($siteobject->id == $slotobject->site_id) {
 			
-			
+			$db->selectAdd('jx_modul.*, jx_modul_to_slots_in_site.id AS slotmodul_id, slot_id, site_id, params ');
 			$db->whereAdd('jx_modul_to_slots_in_site.slot_id', $slotobject->id);
 			$db->whereAdd('jx_modul_to_slots_in_site.site_id = '.$siteobject->id.' OR jx_modul_to_slots_in_site.site_id IS NULL');
 			$db->whereAdd('jx_modul_to_slots_in_site.deleted IS NULL');
@@ -58,9 +58,10 @@ class Modules extends Includes{
 			require_once('modules/'.$path.'/'.$path.'.php');
 			
 			$db = $this->getDatabase();
-
+			$db->selectAdd('jx_modul.*');
+			
 			$db->whereAdd('path', $path);
-			$db->whereAdd('deleted IS NULL');
+			$db->whereAdd('jx_modul.deleted IS NULL');
 			$moduls = $db->find('jx_modul');
 			
 			$results = $this->prepareModuleList($moduls);
@@ -72,13 +73,14 @@ class Modules extends Includes{
 	}
 	public function getModulesBySlot($slotobject){
 		$db = $this->getDatabase();
-		
+
+		//$db->selectAdd('jx_modul_to_slots_in_site.*, jx_modul.path ');
 		$db->whereAdd('jx_modul_to_slots_in_site.slot_id', $slotobject->id);
 		$db->joinAdd('jx_modul_to_slots_in_site', 'jx_modul.id = jx_modul_to_slots_in_site.modul_id');
 		$db->whereAdd('jx_modul_to_slots_in_site.deleted IS NULL');
 		$db->whereAdd('jx_modul.deleted IS NULL');
 		$moduls = $db->find('jx_modul');
-		
+	
 		return $this->prepareModuleList($moduls);
 	}
 	private function prepareModuleList($moduls){
@@ -88,7 +90,7 @@ class Modules extends Includes{
 			
 			$reorder = new stdClass();
 			$reorder->path = 'admin_reorderModules';
-			$reorder->id = rand(1000, 9999);
+			$reorder->slotmodul_id = rand(10000, 99999);
 			$reorder->admin = true;
 			require_once('modules/admin_reorderModules/admin_reorderModules.php');
 			$reorder->object = new Module_Admin_reorderModules($this->core, 0, 'admin_reorderModules');
@@ -103,6 +105,8 @@ class Modules extends Includes{
 				require_once('modules/'.$module->path.'/'.$module->path.'.php');
 				
 				$modulName = 'Module_'.ucfirst($module->path);
+				
+				//echo $module->id.' # '.$module->path.'<br />';
 				
 				$module->object = new $modulName($this->core, $module->id, $module->path);
 				

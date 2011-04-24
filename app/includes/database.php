@@ -57,7 +57,7 @@ class Database extends Includes{
 		if($value === NULL || $value == 'NULL'){
 			$where = $where." IS NULL";
 		}elseif($value !== ''){
-			$where = $where." ".$type." '".mysql_escape_string($value)."'";
+			$where = $where." ".$type." '".mysql_real_escape_string($value)."'";
 		}
 		
 		if($this->where == ''){

@@ -46,6 +46,48 @@ class Module_Admin_reorderModules extends Module{
 		
 		return true;
 	}
+	public function ajax_updateModulParams(){
+		$params  = $this->getPost('params');
+		
+		if(isset($params['newParams']) && !empty($params['newParams'])){
+			
+			$id = $params['modulslot_id'];
+			$newParams = $params['newParams'];
+			
+			$modulVisibleAllOver = $newParams['modulVisibleAllOver'];
+			unset($params['newParams']['modulVisibleAllOver']);
+			
+			$db = $this->getDatabase();
+		
+			$db->whereAdd('id', $params['modulslot_id']);
+			$results = $db->find('jx_modul_to_slots_in_site');
+		
+			if(count($results) > 0){
+				$eintrag = reset($results);
+				
+				if($modulVisibleAllOver == 1){
+					$eintrag->setValue('site_id', 'NULL');
+				}else{
+					$eintrag->setValue('site_id', $params['site_id']);
+				}
+				
+				$newParams = json_encode($params['newParams']);
+		
+				if($newParams !== '[]'){
+					$eintrag->setValue('params', $newParams);
+				}else{
+					$eintrag->setValue('params', 'NULL');
+				}
+
+				$eintrag->syncronize();
+			
+				return json_encode(true);
+			}
+		}
+		
+		return json_encode(false);
+		
+	}
 	public function ajax_insertNewModuleInPlace(){
 		
 		$params  = $this->getPost('params');
@@ -68,29 +110,27 @@ class Module_Admin_reorderModules extends Module{
 		
 		$results = $db->find('jx_modul_to_slots_in_site');
 		
-		//echo $db->last_query;
-		
 		if(count($results) > 0){
 			$result = reset($results);
-
-			//var_dump($result);
-
+			
 			$moduleDataObject = $this->getModules()->loadModule($params['modul']);
 			$moduleDataObject->id = $result->id;
-			$moduleObject = $moduleDataObject->object;
-
-			//var_dump($result->params);
+			$moduleDataObject->modul_id = $result->modul_id;
+			$moduleDataObject->slot_id = $result->slot_id;
+			$moduleDataObject->site_id = $result->site_id;
+			$moduleDataObject->slotmodul_id = $result->id;
 			
-			$moduleDataObject->object->setup($result->params);
+			
+			$moduleObject = $moduleDataObject->object;
+			
+			//$result->object = $moduleObject;
+			
 			$template = $moduleObject->getTemplate();
 			$template->assign('modul', $moduleDataObject);
 			die( $template->fetch('modul.tpl') );
 
 		}
-		
-		//{"contentid":2}
-		
-		return true;
+		return false;
 	}
 	public function ajax_removeModuleFromPlace(){
 		$params  = $this->getPost('params');

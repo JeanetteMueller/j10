@@ -8,6 +8,8 @@ class Module {
 	public $params;
 	public $Template;
 	
+	public $options = array();
+	
 	public $reorder = false;
 	
 	public function __call($functionName, $params){
@@ -51,7 +53,7 @@ class Module {
 		$this->core = $core;
 		$this->id = $id;
 		$this->name = $name;
-		$this->params = new stdClass();
+		$this->params = array(); //new stdClass();
 		
 		$this->Template = $this->core->getTemplate(true);
 
@@ -84,14 +86,28 @@ class Module {
 	
 	public function setup($params){
 		
-		
 		if(!empty($params)){
 			if(is_string($params)){
 				$params = json_decode($params, true);
 			}
 			$this->params = $params;
-			
 		}
+		
+		
+		foreach($this->getOptionKeys() as $key){
+			$this->optionTitles[$key] = $this->getTitleForOption($key);
+			$this->options[$key] = $this->getOptionsFor($key);
+		}
+		
+	}
+	public function getOptionKeys(){
+		return array();
+	}
+	public function getTitleForOption($key){
+		return $key;
+	}
+	public function getOptionsFor($key){
+		return array();
 	}
 	public function autoRefresh(){
 		return false;

@@ -1,14 +1,17 @@
-<div id="modul__<@ $modul->path @>_<@ $modul->id @>" class="modul<@ if $modul->object->autoRefresh() @> refresh<@ /if @> is_<@ $modul->path @>">
+<div id="modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>" class="modul <@ if $modul->object->autoRefresh() @> refresh<@ /if @> is_<@ $modul->path @>">
 	
-	<@ if $modul->object->params|@json_encode != "{}" @>
+	<@ if $modul->object->params|@json_encode != "[]" @>
 		<script type="text/javascript">
 			modul__<@ $modul->path @>_<@ $modul->id @>_params = <@ $modul->object->params|@json_encode @>; 
 		</script>
 	<@ /if @>
 	
+	
 	<@ assign var=header value=$modul->object->loadHeader() @>
 	<@ if $header !== false @>
-	<div class="outerHeader"><div class="header"><@ $header @></div></div>
+	<div class="outerHeader"><@* $modul->site_id *@><div class="header"><@ $header @>
+		
+	</div></div>
 	<@ /if @>
 	
 	
@@ -25,24 +28,33 @@
 	
 	
 	<@ if $modul->object->reorder @>
-		<div class="admin">
-			<ul>
-				<li><a href="javascript:;" class="is_removeModule">&uarr; Modul entfernen</a></li>
-			</ul>
-			<@ if $modul->object->params|@json_encode != "{}" @>
-				<table width="100%" cellspacing="0" cellpadding="5" border="0">
+			
+		<a href="javascript:;" class="admin_optionButtons is_removeModule">X</a>
+	
+
+		<a href="javascript:;" class="admin_optionButtons is_showAdminOptionsOnModul" title="Zeige Administrationsoptionen">#</a>
+		<div class="admin hide">
+			
+			<table cellspacing="0" cellpadding="0" border="0" class="admin_optionstable">
+				<tr>
+					<td>Sichtbar an dieser Position auf allen Seiten </td>
+					<td><input type="checkbox" id="modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>_option__modulVisibleAllOver" class="is_updateModulParams" <@ if $modul->site_id < 1 @>checked="checked"<@ /if @> /></td>
+				</tr>
+				<@ foreach from=$modul->object->params item=value key=key @>
 					<tr>
-						<th>Key</th>
-						<th>Value</th>
+						<td><@ $modul->object->optionTitles[$key] @></td>
+						<td><select id="modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>_option__<@ $key @>" class="is_updateModulParams">
+							<@ foreach from=$modul->object->options[$key] item=option key=optionKey @>
+								<option value="<@ $optionKey @>" <@ if $optionKey == $value @>selected="selected"<@ /if @>><@ $option @></option>
+							<@ /foreach @>
+							</select>
+						</td>
 					</tr>
-					<@ foreach from=$modul->object->params item=value key=key @>
-						<tr>
-							<td><@ $key @></td>
-							<td><@ $value @></td>
-						</tr>
-					<@ /foreach @>
-				</table>
-			<@ /if @>
+				<@ /foreach @>
+
+			</table>
 		</div>
+
+		
 	<@ /if @>
 </div>

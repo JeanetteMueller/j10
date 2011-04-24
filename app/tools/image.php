@@ -89,7 +89,7 @@ class Image {
 			$newImagePath = 'files/cache/images_resized/'.$this->_newBase.'/'.$this->_newFile.'_'.$this->_newWidth.'x'.$this->_newHeight.'_'.$fill.'.jpg';
 			
 			if(file_exists($newImagePath)){
-				unlink($newImagePath);
+				//unlink($newImagePath);
 			}
 			
 			if(!file_exists($newImagePath)){

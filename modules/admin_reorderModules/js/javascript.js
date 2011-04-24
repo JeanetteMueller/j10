@@ -1,6 +1,70 @@
 
 
 jx.modules.admin_reorderModules = {
+	initUpdateParams : function(ref){
+		var self = this;
+		
+		ref.each(function(){
+
+			$(this).unbind('change.updateParams').bind('change.updateParams', function(){
+				
+
+				
+				var target = $(this).parentsUntil('.modul');
+				var id = target.attr('id').split('_').pop();
+				var site_id = $('meta[name=id]').attr('content');
+				var data = {modulslot_id: id, site_id: site_id, newParams: {} };
+				var key = '';
+				$(this).parentsUntil('.admin').find('input, textarea, select').each(function(index, object){
+					
+					key = $(object).attr('id').split('__').pop();
+					
+					data.newParams[key] = $(object).val();
+					
+					if ($(object).attr('type') == 'checkbox'){
+						if($(object).attr('checked')){
+							data.newParams[key] = 1;
+						}else{
+							data.newParams[key] = 0;
+						}
+					}
+					
+					
+				});
+				
+				
+				jQuery.ajax({ 	
+					url: 		jx.root+"ajax/admin_reorderModules/updateModulParams",
+				 	dataType: 	'json',
+					data:  		{params: data},
+					type: 		"POST",
+					context: 	document.body, 
+					success: 	function(json){
+						
+						if(json == "true" ){
+							
+							var modulid = $(target).attr('id');
+							var string = modulid.split('__').pop();
+							var id = string.split('_').pop();
+							var name = string.split('_').shift();
+							
+							var request = [];
+							request.push({id:id, name:name, params:data.newParams});
+													
+							window[modulid+'_params'] = data.newParams;
+							
+							//modul__<@ $modul->path @>_<@ $modul->id @>_params
+							
+							jx.autoRefresh.autoRefresh(request);
+							
+						}
+					}
+				});
+				
+			});
+		});
+		
+	},
 	initReorder : function(ref){
 		
 		$( '.slot' ).sortable({
@@ -75,46 +139,39 @@ jx.modules.admin_reorderModules = {
 		ref.each(function(){
 			
 			$(this).unbind('change.selectmodul').bind('change.selectmodul', function(){
-				var modul = $(this).val().split('___').pop();
-				var modul_id = $(this).val().split('___').shift();
-				var selector = this;
+				if($(this).val() !== ''){
+					var modul = $(this).val().split('___').pop();
+					var modul_id = $(this).val().split('___').shift();
+					var selector = this;				
+					var site_id = $('meta[name=id]').attr('content');
+					var params = 'NULL';
 				
-				console.debug('add modul "'+modul+'" here via AJAX call');
+					var data = {
+						modul: modul,
+						modul_id: modul_id,
+						site_id: site_id,
+						slot_id: $(selector).parentsUntil('.slot').attr('id').split('_').pop(),
+						sort: 999,
+						params: params
+					};
 				
-				$(this).val('');
+					$(selector).val('');
 				
-				var site_id = $('meta[name=id]').attr('content');
-				if( window.confirm('Für alle Webseiten oder nur diese eine? OK = Alle')){
-					site_id = 'NULL';
-				}
-				var params = 'NULL';
-				var newParams = window.prompt('Parametereingabe falls benötigt');
-				if(newParams !== '' && newParams !== null && newParams !== 'NULL'){
-					params = newParams;
-				}
-				
-				var data = {
-					modul: modul,
-					modul_id: modul_id,
-					site_id: site_id,
-					slot_id: $(selector).parentsUntil('.slot').attr('id').split('_').pop(),
-					sort: 999,
-					params: params
-				};
-				
-				jQuery.ajax({ 	
-					url: 		jx.root+'ajax/admin_reorderModules/insertNewModuleInPlace',
-				 	dataType: 	'html',
-					data:  		{params: data},
-					type: 		"POST",
-					context: 	document.body, 
-					success: 	function(html){
-						$(selector).parentsUntil('.slot').append(html);
+					jQuery.ajax({ 	
+						url: 		jx.root+'ajax/admin_reorderModules/insertNewModuleInPlace',
+					 	dataType: 	'html',
+						data:  		{params: data},
+						type: 		"POST",
+						context: 	document.body, 
+						success: 	function(html){
+							$(selector).parentsUntil('.slot').append(html);
 						
-						jx.Listeners.init();
-					}
-				});
-				
+							
+						
+							jx.Listeners.init();
+						}
+					});
+				}
 			});
 		});
 	}, 
@@ -126,26 +183,45 @@ jx.modules.admin_reorderModules = {
 			
 			$(this).unbind('click.removemodul').bind('click.removemodul', function(){
 				
-				var target = $(this).parentsUntil('.modul');
-				var id = $(this).parentsUntil('.modul').attr('id').split('_').pop();
+				if( window.confirm('Wollen Sie das modul wirklich entfernen?')){
+					
+					var target = $(this).parentsUntil('.modul');
+					var id = target.attr('id').split('_').pop();
 				
-				var data = {modulslot_id: id};
+					var data = {modulslot_id: id};
 				
-				jQuery.ajax({ 	
-					url: 		jx.root+'ajax/admin_reorderModules/removeModuleFromPlace',
-				 	dataType: 	'json',
-					data:  		{params: data},
-					type: 		"POST",
-					context: 	document.body, 
-					success: 	function(json){
+					jQuery.ajax({ 	
+						url: 		jx.root+'ajax/admin_reorderModules/removeModuleFromPlace',
+					 	dataType: 	'json',
+						data:  		{params: data},
+						type: 		"POST",
+						context: 	document.body, 
+						success: 	function(json){
 
-						if(json !== 'false' ){
+							if(json !== 'false' ){
 							
 							
-							target.remove();
+								target.remove();
+							}
 						}
-					}
-				});
+					});
+				}
+			});
+		});
+	},
+	initShowAdminOptionsOnModul : function(ref){
+		var self = this;
+		
+		ref.each(function(){
+			
+			$(this).unbind('click.showAdminOptions').bind('click.showAdminOptions', function(){
+				
+				var target = $(this).parentsUntil('.modul').find('.admin');
+				if(target.hasClass('hide')){
+					target.removeClass('hide');
+				}else{
+					target.addClass('hide');
+				}
 			});
 		});
 	}
@@ -156,3 +232,6 @@ jx.Listeners.addListener('is_admin_reorderModules', jx.modules.admin_reorderModu
 jx.Listeners.addListener('is_modulselector', function(ref){jx.modules.admin_reorderModules.initInsert(ref);}, 1);
 
 jx.Listeners.addListener('is_removeModule', function(ref){jx.modules.admin_reorderModules.initRemove(ref);}, 1);
+jx.Listeners.addListener('is_updateModulParams', function(ref){jx.modules.admin_reorderModules.initUpdateParams(ref);}, 1);
+
+jx.Listeners.addListener('is_showAdminOptionsOnModul', function(ref){jx.modules.admin_reorderModules.initShowAdminOptionsOnModul(ref);}, 1);
