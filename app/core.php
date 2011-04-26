@@ -7,15 +7,19 @@ class Core extends core_last{
 	public function __construct(){
 		parent::__construct();
 		
-		
-		
-		$this->buildMainCore();
-		
-		
 		switch ($this->getget('type')) {
 			default:
 			case 'site':
-				$this->buildSiteContent();
+				$Template = $this->getTemplate();
+
+				$Template->assign('site', $this->getSites()->loadSite());
+
+				$Template->assign('moduleIncludes', $this->getModules()->getAllModuleIncludeFiles());
+
+				//var_dump($Template);
+
+				$Template->display('index.tpl');
+				
 			break;
 			case 'modules':
 				if(isset($this->includes['Modules'])){
@@ -145,26 +149,7 @@ class Core extends core_last{
 				}
 			break;
 		}
-			
-
-		
-
-	}
-	private function buildMainCore(){
 		
 	}
-	private function buildSiteContent(){
-		
-		$Template = $this->getTemplate();
-		
-		$Template->assign('site', $this->getSites()->loadSite());
-		
-		$Template->assign('moduleIncludes', $this->getModules()->getAllModuleIncludeFiles());
-		
-		$Template->display('index.tpl');
-	}
-
-
-	
 
 }

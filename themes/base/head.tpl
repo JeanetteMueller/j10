@@ -47,7 +47,7 @@ maximum-scale = 1.0 retains dimensions instead of zooming in if page width < dev
 
 <!-- load the JS of the modules -->
 <@ foreach from=$moduleIncludes.css item=pfad @>
-<link rel="stylesheet" media="all" href="<@ $ROOT @>/<@ $pfad @>?v=1">
+<link rel="stylesheet" media="all" href="<@ $ROOT @><@ $pfad @>?v=1">
 <@ /foreach @>
 
 

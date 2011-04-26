@@ -1,4 +1,4 @@
-<form method="post" action="<@ $ROOT @>/module/login">
+<form method="post" action="<@ $ROOT @>module/login">
 	<fieldset>
 		<div>
 			<label for="module_login_username">Benutzername:</label>

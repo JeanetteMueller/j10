@@ -1,5 +1,7 @@
 <?php
 
+//require_once('externals/Smarty-3.0.7/libs/Smarty.class.php');
+
 require_once('externals/Smarty-2.6.26/Smarty.class.php');
 
 class Template extends Includes{
@@ -7,29 +9,39 @@ class Template extends Includes{
 	public $rootPath = '/';
 	public $theme = 'base';
 	public $smarty = null;
-	public $themePath = null;
-	public $defaultTheme = 'themes/';
-	public $pluginsPath = null;
+	public $themePath = 'themes/';
+	public $defaultTheme = 'base';
+	public $pluginsPath = '/app/includes/template';
 	public $externalsPath = 'externals/';
 	
-	public $files = "files/";
+	public $files = "/files/";
 	
 	public $rewriteRule = false;
 	
 	public $smarty_left_delimiter = '<@';
 	public $smarty_right_delimiter = '@>';
 	
-	public $smarty_compile_dir = "files/cache/template_compiled/";
+	//server absolutpath wird im __construct angefügt
+	public $smarty_compile_dir = "/files/cache/template_compiled/";
+	public $smarty_cache_dir = "/files/cache/template_cache/";
 	
 	public function __construct($core, $name){
+		$serverPath = $_SERVER['SCRIPT_FILENAME'];
+		$serverPathParts = explode('/', $serverPath);
+		$file = array_pop($serverPathParts);
+		$serverPath = implode('/', $serverPathParts);
+		
 		parent::__construct($core, $name);
 		
-		$this->smarty = $this->getPreparedSmarty($this->theme);
+		$this->smarty_compile_dir = $serverPath.$this->smarty_compile_dir;
+		$this->smarty_cache_dir = $serverPath.$this->smarty_cache_dir;
+		$this->pluginsPath = $serverPath.$this->pluginsPath;
 		
+		$this->smarty = $this->getPreparedSmarty($this->theme);
 	}
 	private function getPreparedSmarty($theme='base'){
-
-		$smarty = new Smarty;
+		
+		$smarty = new Smarty();
 		$smarty->core = $this->core;
 		
 		$smarty->left_delimiter = $this->smarty_left_delimiter;
@@ -43,7 +55,10 @@ class Template extends Includes{
 		}
 		
 		$smarty->compile_dir	= $this->smarty_compile_dir.$theme;
-		if(!file_exists($smarty->compile_dir)){ mkdir($smarty->compile_dir, 0755, true);} //Verzeichniss erzeugt
+		if(!file_exists($smarty->compile_dir)){ mkdir($smarty->compile_dir, 0777, true);} //Verzeichniss erzeugt
+		
+		$smarty->cache_dir	= $this->smarty_cache_dir.$theme;
+		if(!file_exists($smarty->cache_dir)){ mkdir($smarty->cache_dir, 0777, true);} //Verzeichniss erzeugt
 		
 		$smarty->template_dir 	= $themepath;
 		$smarty->plugins_dir[]  = $this->pluginsPath;
@@ -55,11 +70,15 @@ class Template extends Includes{
 		$smarty->assign('ROOT', $this->rootPath);
 		$smarty->assign('THEME', $this->theme);
 		$smarty->assign('THEMEPATH', $themepath);
-		$smarty->assign('TEMPLATE_DIR', $this->rootPath.'/'.$themepath);
-		$smarty->assign('TEMPLATE_DIR_BASE', $this->rootPath.'/'.$this->themePath.$this->defaultTheme.'/');
-		$smarty->assign('EXTERNALS_DIR', $this->rootPath.'/'.$this->externalsPath);
-		$smarty->assign('FILES_DIR', $this->rootPath.'/'.$this->files);
+		$smarty->assign('TEMPLATE_DIR', $this->rootPath.$themepath);
+		$smarty->assign('TEMPLATE_DIR_BASE', $this->rootPath.$this->themePath.$this->defaultTheme.'/');
+		$smarty->assign('EXTERNALS_DIR', $this->rootPath.$this->externalsPath);
+		$smarty->assign('FILES_DIR', $this->rootPath.$this->files);
 		
+		//$smarty->debugging = true;
+		//$smarty->caching = true;
+		//$smarty->caching = Smarty::CACHING_LIFETIME_CURRENT;
+		//var_dump($smarty);
 		return $smarty;
 	}
 	
@@ -80,13 +99,21 @@ class Template extends Includes{
 		if(!file_exists($this->smarty->template_dir.$template)){
 			$this->smarty->template_dir = $this->themePath.$this->defaultTheme.'/';
 			$this->smarty->compile_dir	= $this->smarty_compile_dir.$this->defaultTheme;
-			if(!file_exists($this->smarty->compile_dir)){ mkdir($this->smarty->compile_dir, 0755,true);} //Verzeichniss erzeugt
+			$this->smarty->cache_dir	= $this->smarty_cache_dir.$this->defaultTheme;
+			//Verzeichniss erzeugt
+			
+			if(!file_exists($this->smarty->compile_dir)){ mkdir($this->smarty->compile_dir, 0777,true);} 
+			if(!file_exists($this->smarty->cache_dir)){ mkdir($this->smarty->cache_dir, 0777,true);} 
 		}
 	}
 	public function setTemplateToModule($modulname){
-		$modulname = strtolower($modulname);
-		$this->smarty->compile_dir	= $this->smarty_compile_dir."modules/".$modulname;
-		if(!file_exists($this->smarty->compile_dir)){ mkdir($this->smarty->compile_dir, 0755, true);} //Verzeichniss erzeugt
 		$this->smarty->template_dir = 'modules/'.$modulname.'/templates/';
+		$modulname = strtolower($modulname);
+		$this->smarty->compile_dir	= $this->smarty_compile_dir."/modules/".$modulname;
+		$this->smarty->cache_dir	= $this->smarty_cache_dir."/modules/".$modulname;
+		if(!file_exists($this->smarty->compile_dir)){ mkdir($this->smarty->compile_dir, 0777, true);} //Verzeichniss erzeugt
+		if(!file_exists($this->smarty->cache_dir)){ mkdir($this->smarty->cache_dir, 0777, true);}
+		
+		
 	}
 }

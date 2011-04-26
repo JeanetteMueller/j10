@@ -55,13 +55,12 @@ class Module {
 		$this->name = $name;
 		$this->params = array(); //new stdClass();
 		
-		$this->Template = $this->core->getTemplate(true);
-
+		$this->Template = $this->getTemplate(true);
 		$this->Template->setTemplateToModule($this->name);
 	}
 	
 	public function getMyTemplate(){
-		$Template = $this->core->getTemplate(true);
+		$Template = $this->getTemplate(true);
 		$Template->setTemplateToModule($this->name);
 		
 		

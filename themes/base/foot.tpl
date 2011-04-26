@@ -7,10 +7,10 @@
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx.js?v=1"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
-	jx.root = "<@ $ROOT @>/";
+	jx.root = "<@ $ROOT @>";
 /* ]]> */	
 </script>
-<script src="<@ $TEMPLATE_DIR_BASE @>js/jx/valudator.js?v=1"></script>
+<script src="<@ $TEMPLATE_DIR_BASE @>js/jx/validator.js?v=1"></script>
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx/modules.js?v=1"></script>
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx/autorefresh.js?v=1"></script>
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx/overlay.js?v=1"></script>
@@ -22,5 +22,5 @@
 
 <!-- load the JS of the modules -->
 <@ foreach from=$moduleIncludes.javascript item=pfad @>
-<script src="<@ $ROOT @>/<@ $pfad @>"></script>
+<script src="<@ $ROOT @><@ $pfad @>"></script>
 <@ /foreach @>

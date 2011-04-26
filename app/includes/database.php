@@ -1,6 +1,6 @@
 <?php
 
-require_once('externals/MDB2-2.4.1/MDB2.php');
+require_once('externals/MDB2-2.5.0b3/MDB2.php');
 require_once('app/includes/database/dataobject.php');
 
 class Database extends Includes{
@@ -57,7 +57,7 @@ class Database extends Includes{
 		if($value === NULL || $value == 'NULL'){
 			$where = $where." IS NULL";
 		}elseif($value !== ''){
-			$where = $where." ".$type." '".mysql_real_escape_string($value)."'";
+			$where = $where." ".$type." '".mysql_escape_string($value)."'";
 		}
 		
 		if($this->where == ''){
@@ -287,8 +287,8 @@ class Database extends Includes{
 		//Datenbank Connection wird mit den Userdaten aufgebaut
 		
 		if(!isset($this->connections[$type."://".$user.":".$password."@".$host."/".$name])){
-			$mdb2 =& MDB2::factory($type."://".$user.":".$password."@".$host."/".$name);
-			if (PEAR::isError($mdb2)) 
+			$mdb2 = MDB2::factory($type."://".$user.":".$password."@".$host."/".$name);
+			if (@PEAR::isError($mdb2)) 
 			{
 				//Wenn es zu einem Fehler kommt wird die Fehlermeldung ausgegeben und das Skript an dieser Stelle abgebrochen
 		    	die( ($mdb2->getMessage().' - '.$mdb2->getUserinfo()) );
@@ -326,7 +326,7 @@ class Database extends Includes{
 		// Prueft ob der Query erfolgreich ausgearbeitet wurde und  
 		// gibt im Zweifelsfall eine Fehlermeldung zurueck
 		// und bricht das Skript an dieser Stelle ab
-	    if (PEAR::isError($result)) {
+	    if (@PEAR::isError($result)) {
 	        die (($result->getMessage().' - '.$result->getUserinfo()));
 	    }
     
@@ -346,12 +346,12 @@ class Database extends Includes{
 			return false;
 		}
 		
-		$result =& $this->mdb2->exec($query);
+		$result = $this->mdb2->exec($query);
 
 		// Always check that result is not an error
 		if($error == true)
 		{
-			if (PEAR::isError($result)) {
+			if (@PEAR::isError($result)) {
 		        die (($result->getMessage().' - '.$result->getUserinfo()));
 		    }
 	    }

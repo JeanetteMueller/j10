@@ -12,16 +12,27 @@ class core_base{
 		$includeName = substr($functionName, 3);
 		
 		if($prefix == 'get'){
-			if(isset($this->includes[$includeName])){
+			
+			if(isset($this->includes[ucfirst(strtolower($includeName))])){
+				
+				//echo $includeName." ";
+				
+				
 				
 				if(!empty($params) && $params[0] === true){
 					//echo "class: ".$includeName.' neu laden <br />';
-					return $this->loadIncludeClass($includeName);
+					
+					$result = $this->loadIncludeClass($includeName);
+					
+					//var_dump($result);
+					
+					return $result;
 					
 				}else{
-					$object = $this->includes[$includeName];
 					
-					if(strtolower($includeName) == 'database'){
+					$object = $this->includes[ucfirst(strtolower($includeName))];
+					
+					if($includeName == 'database'){
 						$object = clone($object);
 					}
 					return $object;
@@ -36,5 +47,7 @@ class core_base{
 			echo "<pre>";
 			var_dump($params);
 			echo "</pre>";
+			
+		return false;
 	}
 }

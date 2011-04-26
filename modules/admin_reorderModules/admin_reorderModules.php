@@ -150,6 +150,7 @@ class Module_Admin_reorderModules extends Module{
 		return true;
 	}
 	public function getContent(){
+		parent::getContent();
 		
 		$modules = $this->getModules()->getAllModules();
 		

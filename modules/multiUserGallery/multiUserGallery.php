@@ -345,7 +345,7 @@ class Module_MultiUserGallery extends Module{
 		return true;
 	}
 	public function getContent(){
-		
+		parent::getContent();
 		// echo $this->id.' - ';
 		// echo $this->name.' - ';
 		// echo $this->modul_id.' - ';
@@ -361,6 +361,7 @@ class Module_MultiUserGallery extends Module{
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
 			
 		}
+		return true;
 	}
 	public function getFooter(){
 		return true;

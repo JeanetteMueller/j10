@@ -32,6 +32,7 @@ class Module_Page extends Module{
 	public function getContent(){
 		parent::getContent();
 		
+		return true;
 	}
 	
 	public function getHeader(){

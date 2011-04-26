@@ -1,6 +1,8 @@
 # Apache configuration file
 # httpd.apache.org/docs/2.2/mod/quickreference.html
 
+# AddHandler php53-cgi .php
+
 # Techniques in here adapted from all over, 
 #   including Kroc Camen: camendesign.com/.htaccess
 

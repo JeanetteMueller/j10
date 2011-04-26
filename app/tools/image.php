@@ -27,7 +27,7 @@ class Image {
 		$this->_newBase = $base;
 		
 		if(!is_dir('files/originals/'.$this->_newBase)){
-			mkdir('files/originals/'.$this->_newBase, 0755, true);
+			mkdir('files/originals/'.$this->_newBase, 0777, true);
 		}
 	}
 	public function setWidth($width){
@@ -106,7 +106,7 @@ class Image {
 					$this->copyOriginalToNew($image, $new_image);
 
 					if(!is_dir('files/cache/images_resized/'.$this->_newBase)){
-						if(!mkdir('files/cache/images_resized/'.$this->_newBase, 0755, true)){
+						if(!mkdir('files/cache/images_resized/'.$this->_newBase, 0777, true)){
 							echo "Ordner nicht anlegbar";
 							return false;
 						}
@@ -183,14 +183,14 @@ class Image {
 		$distanceLeft = 0;
 		if ($imgratio>1) {
 			$new_width = $this->_newWidth;
-			$new_height = ($this->_newWidth / $imgratio);
-			$distanceTop = ($this->_newHeight - $new_height) / 2;
+			$new_height = bcdiv($this->_newWidth,$imgratio,0);
+			$distanceTop = bcdiv($this->_newHeight - $new_height, 2, 0);
 			//echo "quer";
 			
 		} elseif ($imgratio<1)  {
 			$new_height = $this->_newHeight;
-			$new_width = ($this->_newHeight * $imgratio);
-			$distanceLeft = ($this->_newWidth - $new_width) / 2;
+			$new_width = bcmul($this->_newHeight,$imgratio);
+			$distanceLeft = bcdiv($this->_newWidth - $new_width, 2, 0);
 			//echo "hoch";
 		}else{
 			$new_width = $this->_newWidth;

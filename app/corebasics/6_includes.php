@@ -26,7 +26,7 @@ class core_includes extends core_graphic {
 						
 						$className = str_replace('.php', '', $file);
 						
-						$this->includes[ucfirst($className)] = $this->loadIncludeClass($className);
+						$this->includes[ucfirst(strtolower($className))] = $this->loadIncludeClass($className);
 						
 					}
 		        }
@@ -35,6 +35,7 @@ class core_includes extends core_graphic {
 		}	
 	}
 	public function loadIncludeClass($className){
+		$className = strtolower($className);
 		
 		if(file_exists($this->pathFor_includes . $className.'.php')){
 			require_once($this->pathFor_includes . $className.'.php');
@@ -46,6 +47,7 @@ class core_includes extends core_graphic {
 
 			return $class;
 		}
+		echo $this->pathFor_includes . $className.'.php - not found<br />';
 		return false;
 	}
 }
