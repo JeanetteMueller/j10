@@ -14,6 +14,7 @@ jx.modules.admin_reorderModules = {
 				var id = target.attr('id').split('_').pop();
 				var site_id = $('meta[name=id]').attr('content');
 				var data = {modulslot_id: id, site_id: site_id, newParams: {} };
+
 				var key = '';
 				$(this).parentsUntil('.admin').find('input, textarea, select').each(function(index, object){
 					
@@ -28,8 +29,7 @@ jx.modules.admin_reorderModules = {
 							data.newParams[key] = 0;
 						}
 					}
-					
-					
+
 				});
 				
 				
@@ -154,7 +154,7 @@ jx.modules.admin_reorderModules = {
 						sort: 999,
 						params: params
 					};
-				
+
 					$(selector).val('');
 				
 					jQuery.ajax({ 	
@@ -183,11 +183,11 @@ jx.modules.admin_reorderModules = {
 			
 			$(this).unbind('click.removemodul').bind('click.removemodul', function(){
 				
+
 				if( window.confirm('Wollen Sie das modul wirklich entfernen?')){
 					
 					var target = $(this).parentsUntil('.modul');
 					var id = target.attr('id').split('_').pop();
-				
 					var data = {modulslot_id: id};
 				
 					jQuery.ajax({ 	
@@ -230,8 +230,6 @@ jx.modules.admin_reorderModules = {
 
 jx.Listeners.addListener('is_admin_reorderModules', jx.modules.admin_reorderModules.initReorder, 1);
 jx.Listeners.addListener('is_modulselector', function(ref){jx.modules.admin_reorderModules.initInsert(ref);}, 1);
-
 jx.Listeners.addListener('is_removeModule', function(ref){jx.modules.admin_reorderModules.initRemove(ref);}, 1);
 jx.Listeners.addListener('is_updateModulParams', function(ref){jx.modules.admin_reorderModules.initUpdateParams(ref);}, 1);
-
 jx.Listeners.addListener('is_showAdminOptionsOnModul', function(ref){jx.modules.admin_reorderModules.initShowAdminOptionsOnModul(ref);}, 1);

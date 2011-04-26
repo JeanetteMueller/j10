@@ -57,6 +57,7 @@ class Module_Admin_reorderModules extends Module{
 			$modulVisibleAllOver = $newParams['modulVisibleAllOver'];
 			unset($params['newParams']['modulVisibleAllOver']);
 			
+
 			$db = $this->getDatabase();
 		
 			$db->whereAdd('id', $params['modulslot_id']);
@@ -64,6 +65,7 @@ class Module_Admin_reorderModules extends Module{
 		
 			if(count($results) > 0){
 				$eintrag = reset($results);
+
 				
 				if($modulVisibleAllOver == 1){
 					$eintrag->setValue('site_id', 'NULL');
@@ -78,6 +80,10 @@ class Module_Admin_reorderModules extends Module{
 				}else{
 					$eintrag->setValue('params', 'NULL');
 				}
+
+			
+				$eintrag->setValue('params', json_encode($params['newParams']));
+
 
 				$eintrag->syncronize();
 			

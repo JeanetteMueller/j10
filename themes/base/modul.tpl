@@ -1,3 +1,4 @@
+
 <div id="modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>" class="modul <@ if $modul->object->autoRefresh() @> refresh<@ /if @> is_<@ $modul->path @>">
 	
 	<@ if $modul->object->params|@json_encode != "[]" @>
@@ -28,6 +29,7 @@
 	
 	
 	<@ if $modul->object->reorder @>
+
 			
 		<a href="javascript:;" class="admin_optionButtons is_removeModule">X</a>
 	

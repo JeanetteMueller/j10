@@ -424,6 +424,7 @@ body{
 
 
 	position:absolute;
+
 	right:0px;
 	top:20px;
 	
@@ -432,12 +433,15 @@ body{
 	margin:0;
 	background:#eee;
 	z-index:10000;
+
 }
 .slot .modul .admin a{
 	color:#000;
 }
 .slot .modul .admin ul{
+
 	padding: 0 0 0 15px;
+
 	margin:0;
 }
 .slot .modul .admin .admin_optionstable{
@@ -447,7 +451,6 @@ body{
 	text-align:left;
 	padding:10px;
 }
-
 .slot .modul .admin fieldset legend{
 	position:absolute;
 	top:10px;
@@ -459,6 +462,7 @@ body{
 	background:#fff6f6;
 	color:#f00;
 }
+
 
 .slot .modul .admin_optionButtons{
 	display:block;
@@ -476,11 +480,6 @@ body{
 .slot .modul .is_showAdminOptionsOnModul{
 	right:20px;	
 }
-
-
-
-
-
 
 
 

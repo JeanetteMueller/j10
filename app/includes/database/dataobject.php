@@ -37,8 +37,9 @@ class dataobject {
 				foreach($this->_changed as $key){
 					
 					if(in_array($this->$key, $this->sqlFunktionen )){
-						$updateSql.= $key.' = '.$this->$key.',';
+						$updateSql.= $key.' = '.mysql_real_escape_string($this->$key).',';
 					}else{
+
 						$updateSql.= $key." = '".mysql_escape_string($this->$key)."',";
 					}
 					

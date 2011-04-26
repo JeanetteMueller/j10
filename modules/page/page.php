@@ -3,7 +3,9 @@
 class Module_Page extends Module{	
 	
 	private $_content = null;
+
 	private $_contentid = "0";
+
 	
 	public function setup($params){
 		parent::setup($params);
@@ -62,6 +64,7 @@ class Module_Page extends Module{
 				$db = $this->getDatabase();
 				$contents = $db->find('jx_content');
 				
+
 				$result = array(0=>' – Beitrag wählen – ');
 				
 				foreach($contents as $item){
