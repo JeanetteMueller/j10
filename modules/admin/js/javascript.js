@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	console.debug('admin on the run');
 	
 	var params = {};
 	

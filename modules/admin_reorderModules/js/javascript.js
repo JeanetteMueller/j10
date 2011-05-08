@@ -53,7 +53,8 @@ jx.modules.admin_reorderModules = {
 													
 							window[modulid+'_params'] = data.newParams;
 							
-							//modul__<@ $modul->path @>_<@ $modul->id @>_params
+							$('#modul__'+name+'_'+id+' div.content').html(''+jx.loading);
+							
 							
 							jx.autoRefresh.autoRefresh(request);
 							

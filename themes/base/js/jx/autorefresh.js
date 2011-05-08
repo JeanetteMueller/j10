@@ -1,8 +1,4 @@
 
-
-
-
-
 jx.autoRefresh = {
 	autoRefreshTime : 5000,
 	threads : 0,
@@ -44,12 +40,19 @@ jx.autoRefresh = {
 				var name = string.split('_').shift();
 				
 				var params = window[modulid+'_params'];
+				
+				if(typeof params == 'undefined' || params == null){
+					params = [];
+				}
 			
 				request.push({id:id, name:name, params:params});
+				
+				
 			});
 		}
 		
 		if(request.length > 0){
+			
 			$.ajax({ 	
 				url: 		jx.url+"/modules/",
 				data: 		{request: request}, 

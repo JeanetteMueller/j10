@@ -37,9 +37,16 @@ class Core extends core_last{
 							$moduleObject->setup(NULL);
 						}
 						
+						if(isset($module['params'])){
+							$params = $module['params'];
+						}else{
+							$params = array();
+						}
+						
+						
 						
 						$results[] = array(			'module'	=>$module, 
-													'params'	=>$module['params'],
+													'params'	=>$params,
 													'content'	=>$moduleObject->loadContent(),
 													'header'	=>$moduleObject->loadHeader(),
 													'footer'	=>$moduleObject->loadFooter()
