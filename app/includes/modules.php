@@ -18,8 +18,22 @@ class Modules extends Includes{
 	public function getAllModuleIncludeFiles(){
 		$modules = $this->getAllModules();
 		
-		$results = array();
+		$results = array('javascript'=>array(), 'css'=>array());
+		
+		
+		
+		
 		foreach($modules as $modul){
+			
+			if(in_array($modul->path, array('admin', 'admin_reorderModules')) ){
+				if($this->core->getget('type') == 'site' && $this->getRights()->hasRightFor($this->core->getSession('user_id'), false, 'reorderModules')){
+
+				}else{
+					continue;
+				}
+			}
+			
+			
 			if(file_exists($this->pathForModules.$modul->path.'/js/javascript.js')){
 				$results['javascript'][] = $this->pathForModules.$modul->path.'/js/javascript.js';
 			}

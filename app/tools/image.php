@@ -57,17 +57,19 @@ class Image {
 	
 	public function getImageTag(){
 		
-		$this->convert();
-		
-		$prefix = '';
-		$sufix = '';
-		
-		if($this->_newLink !== false){
-			$prefix = '<a href="'.$this->_newLink.'" target="'.$this->_newTarget.'" title="'.$this->_newTitle.'">';
-			$sufix = '</a>';
+		if($this->convert()){
+			$prefix = '';
+			$sufix = '';
+
+			if($this->_newLink !== false){
+				$prefix = '<a href="'.$this->_newLink.'" target="'.$this->_newTarget.'" title="'.$this->_newTitle.'">';
+				$sufix = '</a>';
+			}
+
+			return $prefix.'<img src="'.$this->_resultFile.'?rand='.rand(100,999).'" alt="'.$this->_newAlt.'" title="'.$this->_newTitle.'" border="0" />'.$sufix;
 		}
+		return '';
 		
-		return $prefix.'<img src="'.$this->_resultFile.'?rand='.rand(100,999).'" alt="'.$this->_newAlt.'" title="'.$this->_newTitle.'" border="0" />'.$sufix;
 	}
 	
 	private function convert(){
@@ -125,13 +127,11 @@ class Image {
 			}
 			$this->_resultFile = $pfad.'/'.$newImagePath;
 			
+			return true;
 			
-			
-		}else{
-			echo 'Bild nicht gefunden';
-			return false;
 		}
-		
+		echo 'Bild nicht gefunden';
+		return false;		
 	}
 	private function saveNewToFile($image, $filepath, $fileformat='jpg'){
 		

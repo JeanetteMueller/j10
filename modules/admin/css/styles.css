@@ -1,0 +1,54 @@
+#adminbar{
+	position:absolute;
+	left:0;
+	top:-30px;
+	width:100%;
+	background:#333;
+	color:#fff;
+	height:30px;
+	overflow:hidden;
+}
+#adminbar .title{
+	font-size:120%;
+	line-height:30px;
+	float:left;
+	font-weight:bold;
+	color:#fff;
+	text-align:center;
+	margin:0 15px;
+	padding:0 15px;
+}
+#adminbar ul{
+	float:left;
+	padding:0;
+	margin:0;
+}
+#adminbar ul li{
+	list-style:none;
+	float:left;
+	margin:2px 4px;
+	padding:0 3px;
+	cursor:pointer;
+}
+#adminbar .close{
+	margin:2px;
+	position:absolute;
+	right:0;
+	top:0;
+	width:24px;
+
+	text-align:center;
+	text-decoration:none;
+}
+#adminbar .close,
+#adminbar ul li{
+	border:1px solid #666;
+	height:24px;
+	line-height:24px;
+	font-weight:bold;
+	color:#fff;
+}
+#adminbar .close:hover,
+#adminbar ul li:hover{
+	background:#555;
+}

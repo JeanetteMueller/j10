@@ -5,7 +5,7 @@ $serverPathParts = explode('/', $serverPath);
 $file = array_pop($serverPathParts);
 $serverPath = implode('/', $serverPathParts);
 
-if($_SERVER['HTTP_HOST'] !== 'home.themaverick.de'){
+if($_SERVER['HTTP_HOST'] !== 'home.themaverick.de' && $_SERVER['HTTP_HOST'] !== 'localhost'){
 
 	ini_set('error_reporting', E_ALL|E_STRICT);
 	error_reporting(E_ALL|E_STRICT);
