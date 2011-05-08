@@ -103,9 +103,32 @@ class Module {
 		return array();
 	}
 	public function getTitleForOption($key){
+		switch($key){
+			case 'contentid':
+				return 'Beitrag';
+			break;
+		}
 		return $key;
 	}
 	public function getOptionsFor($key){
+		
+		switch($key){
+			case 'contentid':
+			
+				$db = $this->getDatabase();
+				$contents = $db->find('jx_content');
+				
+
+				$result = array(0=>' – Beitrag wählen – ');
+				
+				foreach($contents as $item){
+					$result[$item->id] = utf8_encode($item->ueberschrift);
+				}
+				
+				return $result;
+			break;
+		}
+		
 		return array();
 	}
 	public function autoRefresh(){
