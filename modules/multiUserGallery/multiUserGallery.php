@@ -3,6 +3,7 @@
 class Module_MultiUserGallery extends Module{
 	
 	private $_latestGalleriesCount = 9;
+	private $_latestGalleriesStart = 0;
 	
 	public function setup($params){
 		parent::setup($params);
@@ -11,6 +12,10 @@ class Module_MultiUserGallery extends Module{
 		if(!isset($this->params['latestGalleriesCount'])){
 			$this->params['latestGalleriesCount'] = $this->_latestGalleriesCount;
 		}
+		if(!isset($this->params['latestGalleriesStart'])){
+			$this->params['latestGalleriesStart'] = $this->_latestGalleriesStart;
+		}
+		
 		
 		$this->Assign('user_id', $this->getSession('user_id'));
 		
@@ -59,6 +64,22 @@ class Module_MultiUserGallery extends Module{
 		}
 		return false;
 	}
+	public function ajax_loadAdditionalGallerys(){
+		
+		$parameter  = $this->getPost('params');
+		
+		if(!isset($parameter['user_id'])){
+			$parameter['user_id'] = false;
+		}
+		
+		$Template = $this->getMyTemplate();
+		$galleries = $this->getLatestGalleries($parameter['latestGalleriesCount'], $parameter['latestGalleriesStart']+$parameter['latestGalleriesCount'], $parameter['user_id']);
+		$Template->Assign('galleries', $galleries);
+
+		return array(
+			'content'	=> $Template->fetch('content.galleries.tpl')
+		);
+	}
 	public function ajax_showGalleryByUser(){
 		if($this->getRights()->hasRightFor($this->getSession('user_id'), $this->id, 'showGallery')){
 			
@@ -70,7 +91,7 @@ class Module_MultiUserGallery extends Module{
 				$user_id = $parameter['user_id'];
 				
 				
-				$galleries = $this->getLatestGalleries(false, $user_id);
+				$galleries = $this->getLatestGalleries($this->params['latestGalleriesCount'], $this->params['latestGalleriesStart'], $user_id);
 				$Template->Assign('galleries', $galleries);
 				$Template->Assign('username', $galleries[0]->username);
 				
@@ -356,7 +377,7 @@ class Module_MultiUserGallery extends Module{
 				$this->Assign('right_addGallery', true);
 			}
 			
-			$this->Assign('galleries', $this->getLatestGalleries($this->params['latestGalleriesCount']));
+			$this->Assign('galleries', $this->getLatestGalleries($this->params['latestGalleriesCount'], $this->params['latestGalleriesStart']));
 		
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
 			
@@ -407,7 +428,7 @@ class Module_MultiUserGallery extends Module{
 		$db->orderBy('id DESC');
 		return $db->find('jx_module_multiUserGallery_images');
 	}
-	private function getLatestGalleries($limit, $user_id=false, $taxonomie = 0){
+	private function getLatestGalleries($limit, $start, $user_id=false, $taxonomie = 0){
 		$db = $this->getDatabase();
 		$db->selectAdd('jx_module_multiUserGallery_galleries.*');
 		$db->selectAdd('jx_users.username');
@@ -426,7 +447,7 @@ class Module_MultiUserGallery extends Module{
 		//$db->whereAdd('titleimage', '0', '>', 'OR');
 		
 		if($limit !== false){
-			$db->limit('0,'.$limit);
+			$db->limit($start.','.$limit);
 		}
 		
 		

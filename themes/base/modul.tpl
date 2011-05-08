@@ -3,7 +3,7 @@
 	
 	<@ if $modul->object->params|@json_encode != "[]" @>
 		<script type="text/javascript">
-			modul__<@ $modul->path @>_<@ $modul->id @>_params = <@ $modul->object->params|@json_encode @>; 
+			modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>_params = <@ $modul->object->params|@json_encode @>; 
 		</script>
 	<@ /if @>
 	

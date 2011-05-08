@@ -15,6 +15,7 @@
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx/autorefresh.js?v=1"></script>
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx/overlay.js?v=1"></script>
 <script src="<@ $TEMPLATE_DIR_BASE @>js/jx/listener.js?v=1"></script>
+<script src="<@ $TEMPLATE_DIR_BASE @>js/jx/scrolldown.js?v=1"></script>
 <script src="<@ $TEMPLATE_DIR_BASE @>js/plugins.js?v=1"></script>
 
 <!-- load theme special JS file -->

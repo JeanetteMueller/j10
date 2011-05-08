@@ -7,6 +7,7 @@ jx.modules.multiUserGallery = {
 		image_id: 0,
 		user_id:0
 	},
+	isloading : false,
 	
 	init : function(ref){
 		var self = this;
@@ -28,6 +29,9 @@ jx.modules.multiUserGallery = {
 			// $('.is_gallery_imageNext', this).unbind('click.is_gallery_imageNext').bind('click.is_gallery_imageNext', self.showImageNext);
 			
 			$('#overlay_closeButton').unbind('click.overlay_closeButton_multiUserGallery').bind('click.overlay_closeButton_multiUserGallery', self.overlay_closeButton);
+			
+			
+			
 		});
 		
 		
@@ -47,7 +51,50 @@ jx.modules.multiUserGallery = {
 			
 			self.load = true;
 		}
-		
+
+	},
+	loadAdditionalGalleries : function(targets){
+		targets.each(function(index, object){
+			
+			var target = $(object).attr('id');
+			var params = window[target+'_params'];
+			
+			var config = jx.modules.multiUserGallery.config;
+			
+			if(config.gallery_id == 0 || typeof config.gallery_id == 'undefined'){
+				console.debug('gallerien nachladen');
+				
+				if(config.user_id > 0){
+					params.user_id = config.user_id;
+				}
+				
+				jQuery.ajax({ 	
+					url: 		jx.root+"ajax/multiUserGallery/loadAdditionalGallerys",
+					data: 		{params: params}, 
+				 	dataType: 	'json',
+					type: 		"POST",
+					context: 	document.body, 
+					success: 	function(json){
+						
+						params.latestGalleriesStart = parseInt(params.latestGalleriesStart)+parseInt(params.latestGalleriesCount);
+						window[target+'_params'] = params;
+						
+						$('.content .grid', object).append(json['content']);
+						
+						jx.modules.multiUserGallery.isloading = false;
+						
+						
+					}
+				});
+			}
+
+			if(config.gallery_id > 0){
+				console.debug('images der gallerie '+config.gallery_id+' nachladen');
+				
+				jx.modules.multiUserGallery.isloading = false;
+			}
+
+		});
 	},
 	overlay_closeButton : function(){
 		jx.parseParameter(jx.modules.multiUserGallery);
@@ -172,3 +219,5 @@ jx.modules.multiUserGallery = {
 }
 
 jx.Listeners.addListener('is_multiUserGallery', function(ref){jx.modules.multiUserGallery.init(ref); }, 1);
+
+jx.Scrolldown.addScrollCallback(jx.modules.multiUserGallery.loadAdditionalGalleries, '.is_multiUserGallery');
