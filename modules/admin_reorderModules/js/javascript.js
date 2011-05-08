@@ -11,11 +11,14 @@ jx.modules.admin_reorderModules = {
 
 				
 				var target = $(this).parentsUntil('.modul');
+				var modulid = $(target).attr('id');
 				var id = target.attr('id').split('_').pop();
 				var site_id = $('meta[name=id]').attr('content');
 				var data = {modulslot_id: id, site_id: site_id, newParams: {} };
 
 				var key = '';
+				
+				data.newParams = window[modulid+'_params'];
 				$(this).parentsUntil('.admin').find('input, textarea, select').each(function(index, object){
 					
 					key = $(object).attr('id').split('__').pop();

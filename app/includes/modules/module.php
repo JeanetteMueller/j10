@@ -104,15 +104,22 @@ class Module {
 	}
 	public function getTitleForOption($key){
 		switch($key){
+			case 'appendLoadCount':
+				return 'Anzahl der nachzuladenden Einträge';
+			break;
 			case 'contentid':
 				return 'Beitrag';
 			break;
+			
 		}
 		return $key;
 	}
 	public function getOptionsFor($key){
 		
 		switch($key){
+			case 'appendLoadCount':
+				return $this->getConverter()->getNumberArray(1,20);
+			break;
 			case 'contentid':
 			
 				$db = $this->getDatabase();
@@ -127,6 +134,7 @@ class Module {
 				
 				return $result;
 			break;
+			
 		}
 		
 		return array();

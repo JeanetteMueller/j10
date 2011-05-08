@@ -62,10 +62,12 @@ jx.modules.multiUserGallery = {
 			var config = jx.modules.multiUserGallery.config;
 			
 			if(config.gallery_id == 0 || typeof config.gallery_id == 'undefined'){
-				console.debug('gallerien nachladen');
-				
+
 				if(config.user_id > 0){
 					params.user_id = config.user_id;
+				}else{
+					delete params.user_id;
+					delete config.user_id;
 				}
 				
 				jQuery.ajax({ 	
@@ -76,14 +78,14 @@ jx.modules.multiUserGallery = {
 					context: 	document.body, 
 					success: 	function(json){
 						
-						params.latestGalleriesStart = parseInt(params.latestGalleriesStart)+parseInt(params.latestGalleriesCount);
-						window[target+'_params'] = params;
-						
-						$('.content .grid', object).append(json['content']);
+						if(json['content'] !== false){
+							params.latestGalleriesStart = parseInt(params.latestGalleriesStart)+parseInt(params.appendLoadCount);
+							window[target+'_params'] = params;
+							$('.content .grid', object).append(json['content']);
+							jx.modules.multiUserGallery.init(targets);
+						}
 						
 						jx.modules.multiUserGallery.isloading = false;
-						
-						
 					}
 				});
 			}
@@ -145,10 +147,12 @@ jx.modules.multiUserGallery = {
 		jx.overlay.init('multiUserGallery/showImage', {gallery_id: gallery_id, image_id: image_id});
 	},
 	showGalleryHome : function(){
-		var self = $(this);
-		var root = self.parentsUntil('.modul');
+		var root = $(this).parentsUntil('.modul');
 		
 		root.find('div.content').html(''+jx.loading);
+		
+		delete jx.modules.multiUserGallery.config.user_id;
+
 		
 		jQuery.ajax({ 	
 			url: 		jx.root+"module/multiUserGallery",
@@ -163,17 +167,18 @@ jx.modules.multiUserGallery = {
 					$('div.header', root).html(json.header);
 					$('div.footer', root).html(json.footer);
 					
+	
+					window[root.attr('id')+'_params'].latestGalleriesStart = parseInt(window[root.attr('id')+'_params'].latestGalleriesCount);
+					
 					jx.modules.multiUserGallery.init(root);
 				}
 			}
 		});
 	},
 	showGallery : function(){
-		var gallery_id = $(this).attr('id').split('__').pop();
 		
-		var self = $(this);
-		
-		var target = self.parentsUntil('.modul');
+		var gallery_id = $(this).attr('id').split('__').pop();		
+		var target = $(this).parentsUntil('.modul');
 		
 		jx.modules.multiUserGallery.loadGallery({gallery_id: gallery_id}, target);
 	}, 
@@ -193,6 +198,8 @@ jx.modules.multiUserGallery = {
 					$('div.content', target).html(json.content);
 					$('div.header', target).html(json.header);
 					$('div.footer', target).html(json.footer);
+					
+					window[target.attr('id')+'_params'].latestGalleriesStart = parseInt(window[target.attr('id')+'_params'].latestGalleriesCount);
 					
 					jx.modules.multiUserGallery.init(target);
 				}

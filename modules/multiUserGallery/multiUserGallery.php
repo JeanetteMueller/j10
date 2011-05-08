@@ -3,7 +3,8 @@
 class Module_MultiUserGallery extends Module{
 	
 	private $_latestGalleriesCount = 9;
-	private $_latestGalleriesStart = 0;
+	private $_latestGalleriesStart = null;
+	private $_appendLoadCount = 3;
 	
 	public function setup($params){
 		parent::setup($params);
@@ -12,9 +13,14 @@ class Module_MultiUserGallery extends Module{
 		if(!isset($this->params['latestGalleriesCount'])){
 			$this->params['latestGalleriesCount'] = $this->_latestGalleriesCount;
 		}
-		if(!isset($this->params['latestGalleriesStart'])){
-			$this->params['latestGalleriesStart'] = $this->_latestGalleriesStart;
+		//if(!isset($this->params['latestGalleriesStart'])){
+			$this->params['latestGalleriesStart'] = $this->params['latestGalleriesCount'];
+		//}
+		if(!isset($this->params['appendLoadCount'])){
+			$this->params['appendLoadCount'] = $this->_appendLoadCount;
 		}
+		$this->params['latestGalleriesStart'] = $this->params['latestGalleriesCount'];
+		//var_dump($this->params);
 		
 		
 		$this->Assign('user_id', $this->getSession('user_id'));
@@ -73,11 +79,16 @@ class Module_MultiUserGallery extends Module{
 		}
 		
 		$Template = $this->getMyTemplate();
-		$galleries = $this->getLatestGalleries($parameter['latestGalleriesCount'], $parameter['latestGalleriesStart']+$parameter['latestGalleriesCount'], $parameter['user_id']);
-		$Template->Assign('galleries', $galleries);
-
+		$galleries = $this->getLatestGalleries($parameter['appendLoadCount'], $parameter['latestGalleriesStart'], $parameter['user_id']);
+		
+		if(count($galleries) > 0){
+			$Template->Assign('galleries', $galleries);
+			$templ = $Template->fetch('content.galleries.tpl');
+		}else{
+			$templ = false;
+		}
 		return array(
-			'content'	=> $Template->fetch('content.galleries.tpl')
+			'content'	=> $templ
 		);
 	}
 	public function ajax_showGalleryByUser(){
@@ -90,8 +101,9 @@ class Module_MultiUserGallery extends Module{
 				
 				$user_id = $parameter['user_id'];
 				
+				//var_dump($this->params);
 				
-				$galleries = $this->getLatestGalleries($this->params['latestGalleriesCount'], $this->params['latestGalleriesStart'], $user_id);
+				$galleries = $this->getLatestGalleries($this->params['latestGalleriesCount'], 0, $user_id);
 				$Template->Assign('galleries', $galleries);
 				$Template->Assign('username', $galleries[0]->username);
 				
@@ -377,7 +389,7 @@ class Module_MultiUserGallery extends Module{
 				$this->Assign('right_addGallery', true);
 			}
 			
-			$this->Assign('galleries', $this->getLatestGalleries($this->params['latestGalleriesCount'], $this->params['latestGalleriesStart']));
+			$this->Assign('galleries', $this->getLatestGalleries($this->params['latestGalleriesCount'], 0));
 		
 			$this->Assign('taxonomie', $this->getGalleryTaxonomie());
 			
@@ -463,7 +475,7 @@ class Module_MultiUserGallery extends Module{
 	
 	
 	public function getOptionKeys(){
-		return array('latestGalleriesCount');
+		return array('latestGalleriesCount', 'appendLoadCount');
 	}
 	public function getTitleForOption($key){
 		switch($key){
@@ -471,16 +483,16 @@ class Module_MultiUserGallery extends Module{
 				return 'Anzahl der Galerien';
 			break;
 		}
-		return $key;
+		return parent::getTitleForOption($key);
 	}
 	public function getOptionsFor($key){
 		switch($key){
 			case 'latestGalleriesCount':
 			
-				return $this->getConverter()->getNumberArray(3,20);
+				return $this->getConverter()->getNumberArray(1,25);
 			break;
 		}
 		
-		return array();
+		return parent::getOptionsFor($key);
 	}
 }

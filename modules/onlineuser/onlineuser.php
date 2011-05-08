@@ -72,7 +72,7 @@ class Module_Onlineuser extends Module{
 				return 'Anzahl der User';
 			break;
 		}
-		return $key;
+		return parent::getTitleForOption($key);
 	}
 	public function getOptionsFor($key){
 		switch($key){
@@ -82,6 +82,6 @@ class Module_Onlineuser extends Module{
 			break;
 		}
 		
-		return array();
+		return parent::getOptionsFor($key);
 	}
 }

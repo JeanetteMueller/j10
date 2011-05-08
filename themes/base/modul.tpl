@@ -42,12 +42,12 @@
 					<td>Sichtbar an dieser Position auf allen Seiten </td>
 					<td><input type="checkbox" id="modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>_option__modulVisibleAllOver" class="is_updateModulParams" <@ if $modul->site_id < 1 @>checked="checked"<@ /if @> /></td>
 				</tr>
-				<@ foreach from=$modul->object->params item=value key=key @>
+				<@ foreach from=$modul->object->getOptionKeys() item=key @>
 					<tr>
 						<td><@ $modul->object->optionTitles[$key] @></td>
 						<td><select id="modul__<@ $modul->path @>_<@ $modul->slotmodul_id @>_option__<@ $key @>" class="is_updateModulParams">
 							<@ foreach from=$modul->object->options[$key] item=option key=optionKey @>
-								<option value="<@ $optionKey @>" <@ if $optionKey == $value @>selected="selected"<@ /if @>><@ $option @></option>
+								<option value="<@ $optionKey @>" <@ if $optionKey == $modul->object->params[$key] @>selected="selected" checked="checked"<@ /if @>><@ $option @></option>
 							<@ /foreach @>
 							</select>
 						</td>
