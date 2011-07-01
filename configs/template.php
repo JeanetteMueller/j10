@@ -1,6 +1,6 @@
 <?php
 
-$this->theme 					= 'fotoclub';
+$this->theme 					= 'plane';
 $this->rewriteRule 				= true;
 
 

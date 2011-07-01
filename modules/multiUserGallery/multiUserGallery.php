@@ -418,6 +418,7 @@ class Module_MultiUserGallery extends Module{
 		$db->selectAdd('jx_module_multiUserGallery_galleries.*');
 		$db->selectAdd('jx_users.username');
 		$db->whereAdd('jx_module_multiUserGallery_galleries.id', $gallery_id);
+		$db->whereAdd('jx_users.deleted IS NULL');
 		$db->joinAdd('jx_users', 'jx_users.id = jx_module_multiUserGallery_galleries.user_id');
 		$galleries = $db->find('jx_module_multiUserGallery_galleries');
 		
@@ -461,7 +462,7 @@ class Module_MultiUserGallery extends Module{
 		if($limit !== false){
 			$db->limit($start.','.$limit);
 		}
-		
+		$db->whereAdd('jx_users.deleted IS NULL');
 		
 		
 		$db->orderBy('jx_module_multiUserGallery_galleries.edited DESC');
